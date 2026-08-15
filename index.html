@@ -1,0 +1,1952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Magic Fine Arts - Attendance & Salary System</title>
+  
+  <!-- SEO & App Metadata -->
+  <meta name="description" content="Mobile-friendly employee attendance, daily site progress, overtime, and salary recording system for Magic Fine Arts Technical Service LLC.">
+  <meta name="theme-color" content="#0b0f19">
+  
+  <!-- PWA & Mobile Web App Capable -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+
+  <!-- Google Firebase Compatibility SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================
+       1. DESIGN SYSTEM & MODERN DARK THEME
+       ========================================== */
+    :root {
+      --bg-primary: #0b0f19;
+      --bg-secondary: #131b2e;
+      --bg-tertiary: #1e293b;
+      --bg-card: rgba(19, 27, 46, 0.75);
+      --bg-card-hover: rgba(30, 41, 59, 0.85);
+      
+      --accent-indigo: #6366f1;
+      --accent-indigo-hover: #4f46e5;
+      --accent-indigo-glow: rgba(99, 102, 241, 0.25);
+      
+      --color-emerald: #10b981;
+      --color-emerald-glow: rgba(16, 185, 129, 0.2);
+      --color-amber: #f59e0b;
+      --color-amber-glow: rgba(245, 158, 11, 0.2);
+      --color-rose: #f43f5e;
+      --color-rose-glow: rgba(244, 63, 94, 0.2);
+      --color-cyan: #06b6d4;
+
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dark: #64748b;
+      
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(99, 102, 241, 0.3);
+      
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+      --max-width: 1100px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-primary);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 90px;
+      min-height: 100vh;
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-full);
+    }
+
+    /* ==========================================
+       2. HEADER & BRANDING
+       ========================================== */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11, 15, 25, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.75rem 1rem;
+    }
+
+    .header-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--accent-indigo), #818cf8);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.2rem;
+      box-shadow: 0 0 15px var(--accent-indigo-glow);
+    }
+
+    .brand-text h1 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .brand-text p {
+      font-size: 0.75rem;
+      color: var(--accent-indigo);
+      font-weight: 500;
+    }
+
+    .user-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .role-badge.admin {
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .role-badge.supervisor {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-login-toggle {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.4rem 0.85rem;
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+    .btn-login-toggle:hover {
+      background: var(--accent-indigo);
+      border-color: var(--accent-indigo);
+    }
+
+    /* ==========================================
+       3. NAVIGATION (DESKTOP + MOBILE BOTTOM NAV)
+       ========================================== */
+    .desktop-nav {
+      background: rgba(19, 27, 46, 0.6);
+      border-bottom: 1px solid var(--border-color);
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .desktop-nav {
+        display: block;
+      }
+      body {
+        padding-bottom: 2rem;
+      }
+    }
+
+    .nav-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      gap: 0.25rem;
+      padding: 0.4rem 1rem;
+      overflow-x: auto;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.6rem 1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .nav-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-btn.active {
+      color: #fff;
+      background: var(--accent-indigo);
+      font-weight: 600;
+      box-shadow: 0 2px 8px var(--accent-indigo-glow);
+    }
+
+    .mobile-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(11, 15, 25, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-around;
+      padding: 0.4rem 0.25rem;
+    }
+
+    @media (min-width: 768px) {
+      .mobile-bottom-nav {
+        display: none;
+      }
+    }
+
+    .mobile-nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+      font-size: 0.68rem;
+      font-weight: 500;
+      padding: 0.35rem 0.5rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      width: 20%;
+      font-family: inherit;
+    }
+
+    .mobile-nav-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .mobile-nav-btn.active {
+      color: var(--accent-indigo);
+      font-weight: 700;
+    }
+
+    /* ==========================================
+       4. LAYOUT & CONTAINERS
+       ========================================== */
+    .main-container {
+      max-width: var(--max-width);
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .kpi-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0; width: 4px; height: 100%;
+      background: var(--accent-indigo);
+    }
+
+    .kpi-card.emerald::after { background: var(--color-emerald); }
+    .kpi-card.amber::after { background: var(--color-amber); }
+    .kpi-card.rose::after { background: var(--color-rose); }
+
+    .kpi-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .kpi-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .kpi-subtext {
+      font-size: 0.72rem;
+      color: var(--text-dark);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .form-input, .form-select, .form-textarea {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.65rem 0.85rem;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--accent-indigo);
+      box-shadow: 0 0 0 3px var(--accent-indigo-glow);
+    }
+
+    .btn {
+      padding: 0.65rem 1.2rem;
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: var(--accent-indigo);
+      color: #fff;
+      box-shadow: 0 2px 8px var(--accent-indigo-glow);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-indigo-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--bg-tertiary);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-emerald {
+      background: var(--color-emerald);
+      color: #fff;
+      box-shadow: 0 2px 8px var(--color-emerald-glow);
+    }
+
+    .btn-emerald:hover {
+      filter: brightness(1.1);
+    }
+
+    .btn-amber {
+      background: var(--color-amber);
+      color: #000;
+      box-shadow: 0 2px 8px var(--color-amber-glow);
+    }
+
+    .btn-danger {
+      background: var(--color-rose);
+      color: #fff;
+    }
+
+    .btn-sm {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.78rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+
+    .custom-table th {
+      background: var(--bg-secondary);
+      color: var(--text-muted);
+      font-weight: 600;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    .custom-table td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+      vertical-align: middle;
+    }
+
+    .custom-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .custom-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: var(--radius-full);
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+
+    .badge-present { background: var(--color-emerald-glow); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-absent { background: var(--color-rose-glow); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }
+    .badge-pending { background: var(--color-amber-glow); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-paid { background: var(--color-emerald-glow); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-shift { background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); }
+
+    .worker-row-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 0.85rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .worker-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .worker-info {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .avatar-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      background: var(--bg-tertiary);
+      color: var(--accent-indigo);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .worker-name {
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--text-main);
+    }
+
+    .worker-role {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+
+    .status-toggle-group {
+      display: flex;
+      gap: 0.3rem;
+      background: var(--bg-primary);
+      padding: 0.2rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+
+    .status-toggle-btn {
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: transparent;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .status-toggle-btn.active-present {
+      background: var(--color-emerald);
+      color: #fff;
+    }
+
+    .status-toggle-btn.active-absent {
+      background: var(--color-rose);
+      color: #fff;
+    }
+
+    .worker-time-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      padding: 1.25rem;
+      animation: modalUp 0.25s ease-out;
+    }
+
+    @keyframes modalUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .toast-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--accent-indigo);
+      color: var(--text-main);
+      padding: 0.75rem 1.2rem;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      pointer-events: auto;
+      animation: toastIn 0.3s ease;
+    }
+
+    .toast.success { border-left-color: var(--color-emerald); }
+    .toast.error { border-left-color: var(--color-rose); }
+    .toast.warning { border-left-color: var(--color-amber); }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @media print {
+      body { background: #fff; color: #000; padding: 0; }
+      .app-header, .desktop-nav, .mobile-bottom-nav, .btn, .no-print { display: none !important; }
+      .main-container { max-width: 100%; margin: 0; padding: 0; }
+      .card { border: 1px solid #ccc; background: #fff; color: #000; box-shadow: none; }
+      .printable-slip { display: block !important; color: #000 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="brand-logo">MFA</div>
+        <div class="brand-text">
+          <h1>Magic Fine Arts</h1>
+          <p>Attendance & Salary System</p>
+        </div>
+      </div>
+      <div class="user-controls">
+        <span id="headerRoleBadge" class="role-badge admin">
+          <span>👑 Admin</span>
+        </span>
+        <button class="btn-login-toggle" onclick="openAuthModal()">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+          <span id="headerUserLabel">Account</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- DESKTOP NAV -->
+  <nav class="desktop-nav">
+    <div class="nav-container">
+      <button class="nav-btn active" data-tab="dashboard" onclick="switchTab('dashboard')">
+        <span>📊 Dashboard</span>
+      </button>
+      <button class="nav-btn" data-tab="attendance" onclick="switchTab('attendance')">
+        <span>📝 Mark Attendance</span>
+      </button>
+      <button class="nav-btn" data-tab="history" onclick="switchTab('history')">
+        <span>📜 Attendance & Site History</span>
+      </button>
+      <button class="nav-btn admin-only" data-tab="salary" onclick="switchTab('salary')">
+        <span>💰 Salary Sheet</span>
+      </button>
+      <button class="nav-btn admin-only" data-tab="employees" onclick="switchTab('employees')">
+        <span>👷 Employees</span>
+      </button>
+      <button class="nav-btn" data-tab="sites" onclick="switchTab('sites')">
+        <span>🏗️ Sites & Shifts</span>
+      </button>
+      <button class="nav-btn" data-tab="reports" onclick="switchTab('reports')">
+        <span>📈 Reports</span>
+      </button>
+      <button class="nav-btn" data-tab="settings" onclick="switchTab('settings')">
+        <span>⚙️ Settings</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTAINER -->
+  <main class="main-container">
+
+    <!-- DASHBOARD -->
+    <section id="tab-dashboard" class="tab-content active">
+      <div class="kpi-grid">
+        <div class="kpi-card emerald">
+          <div class="kpi-label">Today's Present Crew</div>
+          <div class="kpi-value" id="kpiPresentCount">0 / 0</div>
+          <div class="kpi-subtext" id="kpiPresentPercent">0% attendance logged</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Active Job Sites</div>
+          <div class="kpi-value" id="kpiActiveSites">0</div>
+          <div class="kpi-subtext">Active project locations</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Overtime Today</div>
+          <div class="kpi-value" id="kpiTodayOT">0 hrs</div>
+          <div class="kpi-subtext">Sum of logged overtime</div>
+        </div>
+        <div class="kpi-card rose admin-only">
+          <div class="kpi-label">Pending Salary (This Month)</div>
+          <div class="kpi-value" id="kpiPendingSalary">AED 0</div>
+          <div class="kpi-subtext">Basic + OT un-paid</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">⚡ Quick Actions</div>
+        </div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="switchTab('attendance')">📝 Mark Site Attendance</button>
+          <button class="btn btn-emerald admin-only" onclick="switchTab('salary')">💰 Review Salary Sheet</button>
+          <button class="btn btn-secondary" onclick="switchTab('history')">📜 View Today's Logs</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🏗️ Today's Site Attendance Summary</div>
+          <span class="badge badge-shift" id="dashTodayDate">2026-08-15</span>
+        </div>
+        <div id="dashSiteSummaryList"></div>
+      </div>
+    </section>
+
+    <!-- MARK ATTENDANCE -->
+    <section id="tab-attendance" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📍 Select Site & Shift Details</div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Job Site / Location</label>
+            <select id="attSiteSelect" class="form-select" onchange="onAttSiteChange()"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Shift Type</label>
+            <select id="attShiftSelect" class="form-select" onchange="onAttShiftChange()">
+              <option value="Day">Day Shift</option>
+              <option value="Night">Night Shift</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Working Date</label>
+            <input type="date" id="attWorkingDate" class="form-input">
+          </div>
+        </div>
+      </div>
+
+      <!-- Site Daily Progress Card -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📊 Site Daily Progress Log (Shift Total)</div>
+          <span class="badge badge-shift">Logged 1x Per Shift</span>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Primary Work Type</label>
+            <select id="siteLogWorkType" class="form-select" onchange="toggleCustomWorkTypeInput()">
+              <option value="Normal Plaster">Normal Plaster</option>
+              <option value="Decorative Plaster">Decorative Plaster</option>
+              <option value="Art Work">Art Work</option>
+              <option value="Other">Other (Specify below)</option>
+            </select>
+          </div>
+          <div class="form-group" id="customWorkTypeGroup" style="display: none;">
+            <label class="form-label">Custom Work Type</label>
+            <input type="text" id="siteLogCustomWorkType" class="form-input" placeholder="e.g. Sculpting, Gypsum Repair">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Area Completed (SqM)</label>
+            <input type="number" step="0.1" id="siteLogAreaSqm" class="form-input" placeholder="0.0" oninput="calcMaterialRatio()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Material Bags Used</label>
+            <input type="number" step="1" id="siteLogBagsUsed" class="form-input" placeholder="0" oninput="calcMaterialRatio()">
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: var(--bg-secondary); padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <span style="font-size: 0.82rem; color: var(--text-muted);">Estimated Consumption Efficiency:</span>
+          <span id="siteLogRatioDisplay" style="font-weight: 700; color: var(--color-cyan);">0.00 Bags / SqM</span>
+        </div>
+      </div>
+
+      <!-- Worker Attendance Card -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">👥 Crew Attendance & Overtime Log</div>
+          <button class="btn btn-secondary btn-sm" onclick="applyQuickFillCrewTimes()">⚡ Auto-fill Shift Hours</button>
+        </div>
+        <div id="attWorkerList"></div>
+        <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+          <button class="btn btn-primary" onclick="saveAttendanceAndSiteLog()">💾 Save Site Attendance & Daily Log</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="tab-history" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🔍 Filters & Log History</div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">From Date</label>
+            <input type="date" id="histStartDate" class="form-input" onchange="renderHistoryLogs()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">To Date</label>
+            <input type="date" id="histEndDate" class="form-input" onchange="renderHistoryLogs()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Filter Site</label>
+            <select id="histSiteSelect" class="form-select" onchange="renderHistoryLogs()">
+              <option value="ALL">All Sites</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Filter Shift</label>
+            <select id="histShiftSelect" class="form-select" onchange="renderHistoryLogs()">
+              <option value="ALL">All Shifts</option>
+              <option value="Day">Day Shift</option>
+              <option value="Night">Night Shift</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+        <button id="btnHistSubWorker" class="btn btn-primary btn-sm" onclick="switchHistSubTab('worker')">Worker Attendance Logs</button>
+        <button id="btnHistSubSite" class="btn btn-secondary btn-sm" onclick="switchHistSubTab('site')">Site Daily Progress Logs</button>
+      </div>
+
+      <div id="histWorkerContainer" class="card">
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Worker</th>
+                <th>Site</th>
+                <th>Shift</th>
+                <th>Status</th>
+                <th>Times</th>
+                <th>OT Hours</th>
+                <th>Work Type</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="histWorkerTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="histSiteContainer" class="card" style="display: none;">
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Site</th>
+                <th>Shift</th>
+                <th>Work Type</th>
+                <th>Completed (SqM)</th>
+                <th>Bags Used</th>
+                <th>Efficiency</th>
+                <th>Logged By</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="histSiteTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SALARY SHEET (ADMIN ONLY) -->
+    <section id="tab-salary" class="tab-content admin-only">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">💰 Monthly Salary Sheet & Overtime Register</div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <label class="form-label" style="margin: 0;">Select Month:</label>
+            <input type="month" id="salaryMonthPicker" class="form-input" style="padding: 0.4rem;" onchange="renderSalarySheet()">
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Basic Salary Total</div>
+            <div class="kpi-value" id="salKpiBasic">AED 0</div>
+          </div>
+          <div class="kpi-card amber">
+            <div class="kpi-label">Overtime Pay Total (6.5 AED/h)</div>
+            <div class="kpi-value" id="salKpiOT">AED 0</div>
+          </div>
+          <div class="kpi-card emerald">
+            <div class="kpi-label">Total Gross Payable</div>
+            <div class="kpi-value" id="salKpiGross">AED 0</div>
+          </div>
+          <div class="kpi-card rose">
+            <div class="kpi-label">Pending Payment</div>
+            <div class="kpi-value" id="salKpiPending">AED 0</div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Employee Name</th>
+                <th>Designation</th>
+                <th>Basic Monthly Pay</th>
+                <th>OT Hours</th>
+                <th>OT Rate</th>
+                <th>OT Amount</th>
+                <th>Gross Pay</th>
+                <th>Status</th>
+                <th>Payment Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="salaryTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- EMPLOYEES (ADMIN ONLY) -->
+    <section id="tab-employees" class="tab-content admin-only">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">👷 Employee Roster Management</div>
+          <button class="btn btn-primary btn-sm" onclick="openAddEmployeeModal()">+ Add New Employee</button>
+        </div>
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>Monthly Salary (AED)</th>
+                <th>Join Date</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="employeeTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SITES & SHIFTS -->
+    <section id="tab-sites" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🏗️ Job Sites & Shift Configurations</div>
+          <button class="btn btn-primary btn-sm admin-only" onclick="openAddSiteModal()">+ Add New Site</button>
+        </div>
+        <div id="sitesListContainer" class="form-grid"></div>
+      </div>
+    </section>
+
+    <!-- REPORTS -->
+    <section id="tab-reports" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📈 Reports & Data Export Engine</div>
+        </div>
+        <div class="form-grid">
+          <div class="card" style="margin: 0; background: var(--bg-secondary);">
+            <h4 style="margin-bottom: 0.5rem; color: var(--accent-indigo);">📝 Export Attendance Logs</h4>
+            <button class="btn btn-primary btn-sm" onclick="exportAttendanceCSV()">📥 Download Attendance CSV</button>
+          </div>
+          <div class="card admin-only" style="margin: 0; background: var(--bg-secondary);">
+            <h4 style="margin-bottom: 0.5rem; color: var(--color-emerald);">💰 Export Monthly Salary Sheet</h4>
+            <button class="btn btn-emerald btn-sm" onclick="exportSalaryCSV()">📥 Download Salary CSV</button>
+          </div>
+          <div class="card" style="margin: 0; background: var(--bg-secondary);">
+            <h4 style="margin-bottom: 0.5rem; color: var(--color-amber);">📊 Export Site Productivity Logs</h4>
+            <button class="btn btn-amber btn-sm" onclick="exportSiteLogCSV()">📥 Download Site Logs CSV</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="tab-settings" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">⚙️ Company & System Settings</div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Company Name</label>
+            <input type="text" id="settingCompanyName" class="form-input" value="Magic Fine Arts Technical Service LLC" readonly>
+          </div>
+          <div class="form-group admin-only">
+            <label class="form-label">Company-wide Overtime Rate (AED / Hour)</label>
+            <input type="number" step="0.5" id="settingOtRate" class="form-input" value="6.5">
+          </div>
+        </div>
+        <div class="admin-only" style="margin-top: 1rem;">
+          <button class="btn btn-primary btn-sm" onclick="saveSettings()">💾 Save Settings</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">💾 Backup & Database Management</div>
+        </div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <button class="btn btn-secondary btn-sm" onclick="exportDatabaseJSON()">📥 Export Backup (JSON)</button>
+          <button class="btn btn-danger btn-sm admin-only" onclick="resetSeedData()">🔄 Reset Demo Data</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav class="mobile-bottom-nav">
+    <button class="mobile-nav-btn active" data-tab="dashboard" onclick="switchTab('dashboard')">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+      <span>Home</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="attendance" onclick="switchTab('attendance')">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+      <span>Attendance</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="history" onclick="switchTab('history')">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      <span>Logs</span>
+    </button>
+    <button class="mobile-nav-btn admin-only" data-tab="salary" onclick="switchTab('salary')">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      <span>Salaries</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="settings" onclick="switchTab('settings')">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+      <span>Settings</span>
+    </button>
+  </nav>
+
+  <!-- MODALS -->
+  <div id="authModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="card-header">
+        <div class="card-title">🔐 Role & Account Settings</div>
+        <button class="btn btn-secondary btn-sm" onclick="closeAuthModal()">✕</button>
+      </div>
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label class="form-label">Quick Switch Role Mode:</label>
+        <div style="display: flex; gap: 0.5rem; margin-top: 0.4rem;">
+          <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="setRole('Admin')">👑 Switch to Admin Mode</button>
+          <button class="btn btn-emerald btn-sm" style="flex: 1;" onclick="setRole('Supervisor')">👷 Switch to Supervisor Mode</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="employeeModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="card-header">
+        <div class="card-title" id="empModalTitle">👷 Add Employee</div>
+        <button class="btn btn-secondary btn-sm" onclick="closeEmployeeModal()">✕</button>
+      </div>
+      <input type="hidden" id="empEditId">
+      <div class="form-group" style="margin-bottom: 0.75rem;">
+        <label class="form-label">Full Name</label>
+        <input type="text" id="empName" class="form-input" placeholder="e.g. Rajesh Kumar">
+      </div>
+      <div class="form-group" style="margin-bottom: 0.75rem;">
+        <label class="form-label">Designation</label>
+        <select id="empDesignation" class="form-select">
+          <option value="Senior Plasterer">Senior Plasterer</option>
+          <option value="Decorative Plasterer">Decorative Plasterer</option>
+          <option value="Art Work Specialist">Art Work Specialist</option>
+          <option value="Plastering Helper">Plastering Helper</option>
+          <option value="Mason & Finisher">Mason & Finisher</option>
+          <option value="Site Painter">Site Painter</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom: 0.75rem;">
+        <label class="form-label">Fixed Monthly Basic Salary (AED)</label>
+        <input type="number" id="empSalary" class="form-input" placeholder="3000">
+      </div>
+      <div class="form-group" style="margin-bottom: 0.75rem;">
+        <label class="form-label">Join Date</label>
+        <input type="date" id="empJoinDate" class="form-input">
+      </div>
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label class="form-label">Phone Number (Optional)</label>
+        <input type="tel" id="empPhone" class="form-input" placeholder="+971 50 123 4567">
+      </div>
+      <button class="btn btn-primary" style="width: 100%;" onclick="saveEmployee()">Save Employee</button>
+    </div>
+  </div>
+
+  <div id="siteModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="card-header">
+        <div class="card-title">🏗️ Add Job Site</div>
+        <button class="btn btn-secondary btn-sm" onclick="closeSiteModal()">✕</button>
+      </div>
+      <div class="form-group" style="margin-bottom: 0.75rem;">
+        <label class="form-label">Site / Project Name</label>
+        <input type="text" id="siteNameInput" class="form-input" placeholder="e.g. Palm Jumeirah Villa Site">
+      </div>
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label class="form-label">Status</label>
+        <select id="siteStatusInput" class="form-select">
+          <option value="active">Active</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" style="width: 100%;" onclick="saveSite()">Save Site</button>
+    </div>
+  </div>
+
+  <div id="payModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="card-header">
+        <div class="card-title">💳 Mark Monthly Salary as Paid</div>
+        <button class="btn btn-secondary btn-sm" onclick="closePayModal()">✕</button>
+      </div>
+      <input type="hidden" id="payEmpId">
+      <input type="hidden" id="payMonth">
+      <p id="payEmpDetails" style="font-size: 0.9rem; color: var(--text-main); margin-bottom: 1rem; font-weight: 600;"></p>
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label class="form-label">Payment Settlement Date</label>
+        <input type="date" id="paySettlementDate" class="form-input">
+      </div>
+      <button class="btn btn-emerald" style="width: 100%;" onclick="confirmMarkPaid()">Confirm Paid</button>
+    </div>
+  </div>
+
+  <div id="slipModal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 600px;">
+      <div class="card-header no-print">
+        <div class="card-title">📄 Salary Slip Preview</div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn btn-primary btn-sm" onclick="window.print()">🖨️ Print / Save PDF</button>
+          <button class="btn btn-secondary btn-sm" onclick="closeSlipModal()">✕</button>
+        </div>
+      </div>
+      <div id="slipPrintArea" class="printable-slip" style="padding: 1.5rem; background: #fff; color: #000; border-radius: 8px;">
+        <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 1rem; margin-bottom: 1.5rem;">
+          <h2 style="margin: 0; font-size: 1.4rem; color: #1e1b4b; text-transform: uppercase;">Magic Fine Arts Technical Service LLC</h2>
+          <p style="margin: 0.2rem 0; font-size: 0.85rem; color: #475569;">Dubai, United Arab Emirates • Employee Salary Slip</p>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem; font-size: 0.88rem;">
+          <div>
+            <div><strong>Employee:</strong> <span id="slipEmpName"></span></div>
+            <div><strong>Designation:</strong> <span id="slipEmpRole"></span></div>
+          </div>
+          <div style="text-align: right;">
+            <div><strong>Pay Period:</strong> <span id="slipPayMonth"></span></div>
+            <div><strong>Status:</strong> <span id="slipStatus"></span></div>
+          </div>
+        </div>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.9rem;">
+          <thead>
+            <tr style="background: #f1f5f9; text-align: left;">
+              <th style="padding: 0.6rem; border: 1px solid #cbd5e1;">Earnings Component</th>
+              <th style="padding: 0.6rem; border: 1px solid #cbd5e1; text-align: right;">Details</th>
+              <th style="padding: 0.6rem; border: 1px solid #cbd5e1; text-align: right;">Amount (AED)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 0.6rem; border: 1px solid #cbd5e1;">Basic Monthly Salary</td>
+              <td style="padding: 0.6rem; border: 1px solid #cbd5e1; text-align: right;">Fixed Monthly</td>
+              <td style="padding: 0.6rem; border: 1px solid #cbd5e1; text-align: right;" id="slipBasic">0.00</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.6rem; border: 1px solid #cbd5e1;">Overtime Pay</td>
+              <td style="padding: 0.6rem; border: 1px solid #cbd5e1; text-align: right;" id="slipOtHours">0 hrs @ 6.5 AED</td>
+              <td style="padding: 0.6rem; border: 1px solid #cbd5e1; text-align: right;" id="slipOtPay">0.00</td>
+            </tr>
+            <tr style="font-weight: 700; background: #f8fafc;">
+              <td style="padding: 0.75rem 0.6rem; border: 1px solid #cbd5e1;" colspan="2">TOTAL GROSS PAYABLE</td>
+              <td style="padding: 0.75rem 0.6rem; border: 1px solid #cbd5e1; text-align: right; color: #047857;" id="slipGross">0.00</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top: 3rem; display: flex; justify-content: space-between; font-size: 0.85rem; padding-top: 1rem; border-top: 1px dashed #94a3b8;">
+          <div><br>__________________________<br>Employee Signature</div>
+          <div style="text-align: right;"><br>__________________________<br>Authorized Signature & Stamp</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- SCRIPT -->
+  <script>
+    const STORAGE_KEY = "mfa_app_state_v1";
+    const DEFAULT_STATE = {
+      userRole: "Admin",
+      userEmail: "admin@magicfineart.ae",
+      settings: { companyName: "Magic Fine Arts Technical Service LLC", otRate: 6.5 },
+      employees: [
+        { id: "emp_1", name: "Rajesh Kumar", designation: "Senior Plasterer", monthlySalary: 3200, joinDate: "2024-01-15", status: "active", phone: "+971501112233" },
+        { id: "emp_2", name: "Mohammed Ali", designation: "Decorative Plasterer", monthlySalary: 3800, joinDate: "2024-02-01", status: "active", phone: "+971502223344" },
+        { id: "emp_3", name: "Suresh Patel", designation: "Art Work Specialist", monthlySalary: 4000, joinDate: "2023-11-10", status: "active", phone: "+971503334455" },
+        { id: "emp_4", name: "Abdul Rahman", designation: "Plastering Helper", monthlySalary: 2200, joinDate: "2024-03-20", status: "active", phone: "+971504445566" },
+        { id: "emp_5", name: "Vikram Singh", designation: "Mason & Finisher", monthlySalary: 2800, joinDate: "2024-04-05", status: "active", phone: "+971505556677" },
+        { id: "emp_6", name: "Hassan Ibrahim", designation: "Site Painter", monthlySalary: 2500, joinDate: "2024-05-12", status: "active", phone: "+971506667788" }
+      ],
+      sites: [
+        { id: "site_1", siteName: "Burj Crown Villa Site", status: "active", shifts: { Day: { normalStart: "07:00", normalEnd: "15:30" }, Night: { normalStart: "21:00", normalEnd: "05:30" } } },
+        { id: "site_2", siteName: "Palm Jumeirah Beach Resort", status: "active", shifts: { Day: { normalStart: "07:00", normalEnd: "15:30" }, Night: { normalStart: "21:00", normalEnd: "05:30" } } },
+        { id: "site_3", siteName: "Downtown Dubai Art Wall", status: "active", shifts: { Day: { normalStart: "07:30", normalEnd: "16:00" }, Night: { normalStart: "20:00", normalEnd: "04:30" } } }
+      ],
+      attendance: [
+        { id: "att_101", employeeId: "emp_1", employeeName: "Rajesh Kumar", siteId: "site_1", siteName: "Burj Crown Villa Site", shiftType: "Day", workType: "Normal Plaster", workingDate: "2026-08-15", timeStart: "07:00", timeEnd: "17:30", overtimeHours: 2.0, status: "present", remark: "Completed front facade wall", createdBy: "supervisor@magicfineart.ae" },
+        { id: "att_102", employeeId: "emp_2", employeeName: "Mohammed Ali", siteId: "site_1", siteName: "Burj Crown Villa Site", shiftType: "Day", workType: "Decorative Plaster", workingDate: "2026-08-15", timeStart: "07:00", timeEnd: "17:30", overtimeHours: 2.0, status: "present", remark: "Archway decorative molding", createdBy: "supervisor@magicfineart.ae" }
+      ],
+      siteDailyLogs: [
+        { id: "log_201", siteId: "site_1", siteName: "Burj Crown Villa Site", shiftType: "Day", workType: "Normal Plaster", workingDate: "2026-08-15", areaCompletedSqm: 145.5, materialBagsUsed: 22, remark: "High output day on villa east side", createdBy: "supervisor@magicfineart.ae" }
+      ],
+      salaryPayments: []
+    };
+
+    let appState = loadState();
+    function loadState() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) return JSON.parse(stored);
+      } catch (e) {}
+      return DEFAULT_STATE;
+    }
+    function saveState() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(appState)); } catch (e) {}
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const todayStr = new Date().toISOString().split("T")[0];
+      const monthStr = todayStr.substring(0, 7);
+      document.getElementById("attWorkingDate").value = todayStr;
+      document.getElementById("histStartDate").value = todayStr;
+      document.getElementById("histEndDate").value = todayStr;
+      document.getElementById("salaryMonthPicker").value = monthStr;
+      document.getElementById("paySettlementDate").value = todayStr;
+
+      updateRoleUI();
+      populateSiteDropdowns();
+      renderDashboard();
+      renderAttendanceForm();
+      renderHistoryLogs();
+      renderSalarySheet();
+      renderEmployeeList();
+      renderSitesList();
+
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      }
+    });
+
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".nav-btn, .mobile-nav-btn").forEach(el => el.classList.toggle("active", el.dataset.tab === tabId));
+      const target = document.getElementById("tab-" + tabId);
+      if (target) target.classList.add("active");
+
+      if (tabId === "dashboard") renderDashboard();
+      if (tabId === "attendance") renderAttendanceForm();
+      if (tabId === "history") renderHistoryLogs();
+      if (tabId === "salary") renderSalarySheet();
+      if (tabId === "employees") renderEmployeeList();
+      if (tabId === "sites") renderSitesList();
+    }
+
+    function updateRoleUI() {
+      const badge = document.getElementById("headerRoleBadge");
+      const userLabel = document.getElementById("headerUserLabel");
+      const isAdmin = appState.userRole === "Admin";
+
+      if (isAdmin) {
+        badge.className = "role-badge admin";
+        badge.innerHTML = "<span>👑 Admin</span>";
+        userLabel.textContent = appState.userEmail || "admin@magicfineart.ae";
+      } else {
+        badge.className = "role-badge supervisor";
+        badge.innerHTML = "<span>👷 Supervisor</span>";
+        userLabel.textContent = appState.userEmail || "supervisor@magicfineart.ae";
+      }
+      document.querySelectorAll(".admin-only").forEach(el => el.style.display = isAdmin ? "" : "none");
+    }
+
+    function setRole(role) {
+      appState.userRole = role;
+      appState.userEmail = role === "Admin" ? "admin@magicfineart.ae" : "supervisor@magicfineart.ae";
+      saveState();
+      updateRoleUI();
+      closeAuthModal();
+      showToast(`Switched mode to ${role}`, "success");
+      renderDashboard();
+      renderSalarySheet();
+    }
+
+    function openAuthModal() { document.getElementById("authModal").classList.add("active"); }
+    function closeAuthModal() { document.getElementById("authModal").classList.remove("active"); }
+
+    function renderDashboard() {
+      const todayStr = new Date().toISOString().split("T")[0];
+      document.getElementById("dashTodayDate").textContent = todayStr;
+      const activeEmployees = appState.employees.filter(e => e.status === "active");
+      const activeSites = appState.sites.filter(s => s.status === "active");
+
+      const todayLogs = appState.attendance.filter(a => a.workingDate === todayStr);
+      const presentCount = todayLogs.filter(a => a.status === "present").length;
+      const percent = activeEmployees.length > 0 ? Math.round((presentCount / activeEmployees.length) * 100) : 0;
+
+      document.getElementById("kpiPresentCount").textContent = `${presentCount} / ${activeEmployees.length}`;
+      document.getElementById("kpiPresentPercent").textContent = `${percent}% attendance logged today`;
+      document.getElementById("kpiActiveSites").textContent = activeSites.length;
+
+      const todayOt = todayLogs.reduce((acc, l) => acc + (l.overtimeHours || 0), 0);
+      document.getElementById("kpiTodayOT").textContent = `${todayOt.toFixed(1)} hrs`;
+
+      const currentMonth = todayStr.substring(0, 7);
+      let pendingTotal = 0;
+      activeEmployees.forEach(emp => {
+        const isPaid = appState.salaryPayments.some(p => p.employeeId === emp.id && p.month === currentMonth && p.paymentStatus === "Paid");
+        if (!isPaid) {
+          const empMonthLogs = appState.attendance.filter(a => a.employeeId === emp.id && a.workingDate.startsWith(currentMonth));
+          const empOt = empMonthLogs.reduce((acc, l) => acc + (l.overtimeHours || 0), 0);
+          pendingTotal += (emp.monthlySalary + (empOt * (appState.settings.otRate || 6.5)));
+        }
+      });
+      document.getElementById("kpiPendingSalary").textContent = `AED ${pendingTotal.toLocaleString()}`;
+
+      const container = document.getElementById("dashSiteSummaryList");
+      container.innerHTML = "";
+      activeSites.forEach(site => {
+        const siteLogsToday = todayLogs.filter(a => a.siteId === site.id);
+        const dayCrew = siteLogsToday.filter(a => a.shiftType === "Day").length;
+        const nightCrew = siteLogsToday.filter(a => a.shiftType === "Night").length;
+
+        const div = document.createElement("div");
+        div.style.cssText = "background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.85rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;";
+        div.innerHTML = `
+          <div>
+            <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-main);">${site.siteName}</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Day Shift: <strong style="color: var(--color-emerald);">${dayCrew} Present</strong> • Night Shift: <strong style="color: var(--accent-indigo);">${nightCrew} Present</strong></div>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="quickMarkSite('${site.id}')">📝 Mark Attendance</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function quickMarkSite(siteId) {
+      document.getElementById("attSiteSelect").value = siteId;
+      onAttSiteChange();
+      switchTab("attendance");
+    }
+
+    function populateSiteDropdowns() {
+      const attSelect = document.getElementById("attSiteSelect");
+      const histSelect = document.getElementById("histSiteSelect");
+      attSelect.innerHTML = "";
+      histSelect.innerHTML = '<option value="ALL">All Sites</option>';
+
+      appState.sites.filter(s => s.status === "active").forEach(site => {
+        attSelect.add(new Option(site.siteName, site.id));
+        histSelect.add(new Option(site.siteName, site.id));
+      });
+    }
+
+    function onAttSiteChange() { renderAttendanceForm(); }
+    function onAttShiftChange() { renderAttendanceForm(); }
+    function toggleCustomWorkTypeInput() {
+      document.getElementById("customWorkTypeGroup").style.display = document.getElementById("siteLogWorkType").value === "Other" ? "flex" : "none";
+    }
+    function calcMaterialRatio() {
+      const area = parseFloat(document.getElementById("siteLogAreaSqm").value) || 0;
+      const bags = parseFloat(document.getElementById("siteLogBagsUsed").value) || 0;
+      document.getElementById("siteLogRatioDisplay").textContent = area > 0 ? `${(bags / area).toFixed(2)} Bags / SqM` : "0.00 Bags / SqM";
+    }
+
+    function renderAttendanceForm() {
+      const siteId = document.getElementById("attSiteSelect").value;
+      const shiftType = document.getElementById("attShiftSelect").value;
+      const workingDate = document.getElementById("attWorkingDate").value;
+
+      const container = document.getElementById("attWorkerList");
+      container.innerHTML = "";
+      const activeEmployees = appState.employees.filter(e => e.status === "active");
+
+      const siteObj = appState.sites.find(s => s.id === siteId);
+      const defaultTimes = siteObj && siteObj.shifts && siteObj.shifts[shiftType] ? siteObj.shifts[shiftType] : { normalStart: "07:00", normalEnd: "15:30" };
+
+      activeEmployees.forEach(emp => {
+        const existing = appState.attendance.find(a => a.employeeId === emp.id && a.workingDate === workingDate && a.siteId === siteId && a.shiftType === shiftType);
+        const isPresent = existing ? existing.status === "present" : true;
+        const timeStart = existing ? existing.timeStart : defaultTimes.normalStart;
+        const timeEnd = existing ? existing.timeEnd : defaultTimes.normalEnd;
+        const otHours = existing ? existing.overtimeHours : calcOvertimeHours(timeStart, timeEnd, defaultTimes);
+        const remark = existing ? existing.remark : "";
+
+        const card = document.createElement("div");
+        card.className = "worker-row-card";
+        card.dataset.empId = emp.id;
+        card.innerHTML = `
+          <div class="worker-card-header">
+            <div class="worker-info">
+              <div class="avatar-icon">${emp.name.charAt(0)}</div>
+              <div>
+                <div class="worker-name">${emp.name}</div>
+                <div class="worker-role">${emp.designation}</div>
+              </div>
+            </div>
+            <div class="status-toggle-group">
+              <button type="button" class="status-toggle-btn ${isPresent ? 'active-present' : ''}" onclick="toggleWorkerStatus(this, 'present')">Present</button>
+              <button type="button" class="status-toggle-btn ${!isPresent ? 'active-absent' : ''}" onclick="toggleWorkerStatus(this, 'absent')">Absent</button>
+            </div>
+          </div>
+          <div class="worker-time-inputs" style="${!isPresent ? 'display:none;' : ''}">
+            <div class="form-group"><label class="form-label">Start</label><input type="time" class="form-input emp-time-start" value="${timeStart}" onchange="recalcWorkerOT(this)"></div>
+            <div class="form-group"><label class="form-label">End</label><input type="time" class="form-input emp-time-end" value="${timeEnd}" onchange="recalcWorkerOT(this)"></div>
+            <div class="form-group"><label class="form-label">OT (Hrs)</label><input type="number" step="0.5" class="form-input emp-ot-hours" value="${otHours}"></div>
+          </div>
+          <div class="form-group" style="${!isPresent ? 'display:none;' : ''}">
+            <input type="text" class="form-input emp-remark" placeholder="Individual remark" value="${remark}">
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function toggleWorkerStatus(btn, status) {
+      const card = btn.closest(".worker-row-card");
+      card.querySelectorAll(".status-toggle-btn").forEach(b => b.className = "status-toggle-btn");
+      if (status === "present") {
+        btn.classList.add("active-present");
+        card.querySelectorAll(".worker-time-inputs, .form-group").forEach(el => el.style.display = "");
+      } else {
+        btn.classList.add("active-absent");
+        card.querySelector(".worker-time-inputs").style.display = "none";
+        card.querySelector(".emp-remark").parentElement.style.display = "none";
+      }
+    }
+
+    function calcOvertimeHours(startStr, endStr, normalTimes) {
+      if (!startStr || !endStr) return 0;
+      const parseTime = (tStr) => { const [h, m] = tStr.split(":").map(Number); return h * 60 + m; };
+      let start = parseTime(startStr);
+      let end = parseTime(endStr);
+      if (end < start) end += 24 * 60;
+      const actualHours = (end - start) / 60;
+      let normStart = parseTime(normalTimes.normalStart);
+      let normEnd = parseTime(normalTimes.normalEnd);
+      if (normEnd < normStart) normEnd += 24 * 60;
+      const normHours = (normEnd - normStart) / 60;
+      return Math.max(0, Math.round((actualHours - normHours) * 2) / 2);
+    }
+
+    function recalcWorkerOT(input) {
+      const card = input.closest(".worker-row-card");
+      const startStr = card.querySelector(".emp-time-start").value;
+      const endStr = card.querySelector(".emp-time-end").value;
+      const siteId = document.getElementById("attSiteSelect").value;
+      const shiftType = document.getElementById("attShiftSelect").value;
+      const siteObj = appState.sites.find(s => s.id === siteId);
+      const defaultTimes = siteObj && siteObj.shifts && siteObj.shifts[shiftType] ? siteObj.shifts[shiftType] : { normalStart: "07:00", normalEnd: "15:30" };
+      card.querySelector(".emp-ot-hours").value = calcOvertimeHours(startStr, endStr, defaultTimes);
+    }
+
+    function applyQuickFillCrewTimes() {
+      const siteId = document.getElementById("attSiteSelect").value;
+      const shiftType = document.getElementById("attShiftSelect").value;
+      const siteObj = appState.sites.find(s => s.id === siteId);
+      const defaultTimes = siteObj && siteObj.shifts && siteObj.shifts[shiftType] ? siteObj.shifts[shiftType] : { normalStart: "07:00", normalEnd: "15:30" };
+
+      document.querySelectorAll(".worker-row-card").forEach(card => {
+        card.querySelector(".emp-time-start").value = defaultTimes.normalStart;
+        card.querySelector(".emp-time-end").value = defaultTimes.normalEnd;
+        recalcWorkerOT(card.querySelector(".emp-time-start"));
+      });
+      showToast("Applied shift times across crew", "success");
+    }
+
+    function saveAttendanceAndSiteLog() {
+      const siteId = document.getElementById("attSiteSelect").value;
+      const shiftType = document.getElementById("attShiftSelect").value;
+      const workingDate = document.getElementById("attWorkingDate").value;
+      const siteObj = appState.sites.find(s => s.id === siteId);
+      const siteName = siteObj ? siteObj.siteName : "Site";
+
+      const workTypeSel = document.getElementById("siteLogWorkType").value;
+      const workType = workTypeSel === "Other" ? (document.getElementById("siteLogCustomWorkType").value || "Other") : workTypeSel;
+      const areaSqm = parseFloat(document.getElementById("siteLogAreaSqm").value) || 0;
+      const bagsUsed = parseFloat(document.getElementById("siteLogBagsUsed").value) || 0;
+
+      appState.siteDailyLogs = appState.siteDailyLogs.filter(l => !(l.siteId === siteId && l.shiftType === shiftType && l.workingDate === workingDate));
+      appState.siteDailyLogs.push({ id: "log_" + Date.now(), siteId, siteName, shiftType, workType, workingDate, areaCompletedSqm: areaSqm, materialBagsUsed: bagsUsed, remark: "", createdBy: appState.userEmail });
+
+      document.querySelectorAll(".worker-row-card").forEach(card => {
+        const empId = card.dataset.empId;
+        const empObj = appState.employees.find(e => e.id === empId);
+        const isPresent = card.querySelector(".status-toggle-btn.active-present") !== null;
+        const timeStart = card.querySelector(".emp-time-start").value;
+        const timeEnd = card.querySelector(".emp-time-end").value;
+        const overtimeHours = parseFloat(card.querySelector(".emp-ot-hours").value) || 0;
+        const remark = card.querySelector(".emp-remark").value.trim();
+
+        appState.attendance = appState.attendance.filter(a => !(a.employeeId === empId && a.workingDate === workingDate && a.siteId === siteId && a.shiftType === shiftType));
+        appState.attendance.push({
+          id: "att_" + Date.now() + "_" + empId,
+          employeeId: empId,
+          employeeName: empObj ? empObj.name : "Worker",
+          siteId,
+          siteName,
+          shiftType,
+          workType,
+          workingDate,
+          timeStart,
+          timeEnd,
+          overtimeHours: isPresent ? overtimeHours : 0,
+          status: isPresent ? "present" : "absent",
+          remark,
+          createdBy: appState.userEmail
+        });
+      });
+
+      saveState();
+      showToast(`Saved attendance & site daily log`, "success");
+      renderDashboard();
+    }
+
+    let currentHistSubTab = "worker";
+    function switchHistSubTab(type) {
+      currentHistSubTab = type;
+      document.getElementById("btnHistSubWorker").className = type === "worker" ? "btn btn-primary btn-sm" : "btn btn-secondary btn-sm";
+      document.getElementById("btnHistSubSite").className = type === "site" ? "btn btn-primary btn-sm" : "btn btn-secondary btn-sm";
+      document.getElementById("histWorkerContainer").style.display = type === "worker" ? "block" : "none";
+      document.getElementById("histSiteContainer").style.display = type === "site" ? "block" : "none";
+      renderHistoryLogs();
+    }
+
+    function renderHistoryLogs() {
+      const startDate = document.getElementById("histStartDate").value;
+      const endDate = document.getElementById("histEndDate").value;
+      const siteFilter = document.getElementById("histSiteSelect").value;
+      const shiftFilter = document.getElementById("histShiftSelect").value;
+
+      if (currentHistSubTab === "worker") {
+        const tbody = document.getElementById("histWorkerTbody");
+        tbody.innerHTML = "";
+        let logs = appState.attendance.filter(l => {
+          if (startDate && l.workingDate < startDate) return false;
+          if (endDate && l.workingDate > endDate) return false;
+          if (siteFilter !== "ALL" && l.siteId !== siteFilter) return false;
+          if (shiftFilter !== "ALL" && l.shiftType !== shiftFilter) return false;
+          return true;
+        }).sort((a, b) => b.workingDate.localeCompare(a.workingDate));
+
+        logs.forEach(l => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${l.workingDate}</td>
+            <td style="font-weight: 600;">${l.employeeName}</td>
+            <td>${l.siteName}</td>
+            <td><span class="badge badge-shift">${l.shiftType}</span></td>
+            <td><span class="badge ${l.status === 'present' ? 'badge-present' : 'badge-absent'}">${l.status.toUpperCase()}</span></td>
+            <td>${l.status === 'present' ? l.timeStart + ' - ' + l.timeEnd : '-'}</td>
+            <td style="font-weight: 700; color: var(--color-amber);">${l.overtimeHours || 0} hrs</td>
+            <td>${l.workType || '-'}</td>
+            <td><button class="btn btn-danger btn-sm admin-only" onclick="deleteAttendanceLog('${l.id}')">Delete</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } else {
+        const tbody = document.getElementById("histSiteTbody");
+        tbody.innerHTML = "";
+        let siteLogs = appState.siteDailyLogs.filter(l => {
+          if (startDate && l.workingDate < startDate) return false;
+          if (endDate && l.workingDate > endDate) return false;
+          if (siteFilter !== "ALL" && l.siteId !== siteFilter) return false;
+          if (shiftFilter !== "ALL" && l.shiftType !== shiftFilter) return false;
+          return true;
+        }).sort((a, b) => b.workingDate.localeCompare(a.workingDate));
+
+        siteLogs.forEach(l => {
+          const ratio = l.areaCompletedSqm > 0 ? (l.materialBagsUsed / l.areaCompletedSqm).toFixed(2) : "0.00";
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${l.workingDate}</td>
+            <td style="font-weight: 600;">${l.siteName}</td>
+            <td><span class="badge badge-shift">${l.shiftType}</span></td>
+            <td>${l.workType}</td>
+            <td style="font-weight: 700; color: var(--color-emerald);">${l.areaCompletedSqm} m²</td>
+            <td style="font-weight: 700;">${l.materialBagsUsed} bags</td>
+            <td style="color: var(--color-cyan);">${ratio} Bags/m²</td>
+            <td style="font-size: 0.78rem; color: var(--text-muted);">${l.createdBy || 'Supervisor'}</td>
+            <td><button class="btn btn-danger btn-sm admin-only" onclick="deleteSiteLog('${l.id}')">Delete</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+      updateRoleUI();
+    }
+
+    function deleteAttendanceLog(id) {
+      if (confirm("Delete attendance log?")) {
+        appState.attendance = appState.attendance.filter(a => a.id !== id);
+        saveState(); renderHistoryLogs(); showToast("Log deleted", "success");
+      }
+    }
+    function deleteSiteLog(id) {
+      if (confirm("Delete site progress log?")) {
+        appState.siteDailyLogs = appState.siteDailyLogs.filter(l => l.id !== id);
+        saveState(); renderHistoryLogs(); showToast("Site log deleted", "success");
+      }
+    }
+
+    function renderSalarySheet() {
+      const month = document.getElementById("salaryMonthPicker").value;
+      const tbody = document.getElementById("salaryTbody");
+      tbody.innerHTML = "";
+
+      let totalBasic = 0, totalOT = 0, totalGross = 0, totalPending = 0;
+      const otRate = appState.settings.otRate || 6.5;
+
+      appState.employees.forEach(emp => {
+        const empLogs = appState.attendance.filter(a => a.employeeId === emp.id && a.workingDate.startsWith(month) && a.status === "present");
+        const otHours = empLogs.reduce((acc, l) => acc + (l.overtimeHours || 0), 0);
+        const otPay = otHours * otRate;
+        const basic = emp.monthlySalary || 0;
+        const gross = basic + otPay;
+
+        const paymentRecord = appState.salaryPayments.find(p => p.employeeId === emp.id && p.month === month);
+        const isPaid = paymentRecord && paymentRecord.paymentStatus === "Paid";
+        const payDate = isPaid ? paymentRecord.paymentDate : "-";
+
+        totalBasic += basic; totalOT += otPay; totalGross += gross;
+        if (!isPaid) totalPending += gross;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td style="font-weight: 700;">${emp.name}</td>
+          <td>${emp.designation}</td>
+          <td>AED ${basic.toLocaleString()}</td>
+          <td>${otHours.toFixed(1)} hrs</td>
+          <td>AED ${otRate.toFixed(2)}</td>
+          <td style="color: var(--color-amber); font-weight: 600;">AED ${otPay.toLocaleString()}</td>
+          <td style="color: var(--color-emerald); font-weight: 700;">AED ${gross.toLocaleString()}</td>
+          <td><span class="badge ${isPaid ? 'badge-paid' : 'badge-pending'}">${isPaid ? 'PAID' : 'PENDING'}</span></td>
+          <td style="font-size: 0.8rem; color: var(--text-muted);">${payDate}</td>
+          <td>
+            <div style="display: flex; gap: 0.3rem;">
+              ${!isPaid ? `<button class="btn btn-emerald btn-sm" onclick="openPayModal('${emp.id}', '${month}', '${emp.name}', ${gross})">Mark Paid</button>` : ''}
+              <button class="btn btn-secondary btn-sm" onclick="printPaySlip('${emp.id}', '${month}', ${basic}, ${otHours}, ${otPay}, ${gross}, '${isPaid ? 'Paid' : 'Pending'}')">📄 Slip</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById("salKpiBasic").textContent = `AED ${totalBasic.toLocaleString()}`;
+      document.getElementById("salKpiOT").textContent = `AED ${totalOT.toLocaleString()}`;
+      document.getElementById("salKpiGross").textContent = `AED ${totalGross.toLocaleString()}`;
+      document.getElementById("salKpiPending").textContent = `AED ${totalPending.toLocaleString()}`;
+    }
+
+    function openPayModal(empId, month, name, amount) {
+      document.getElementById("payEmpId").value = empId;
+      document.getElementById("payMonth").value = month;
+      document.getElementById("payEmpDetails").textContent = `${name} — ${month} Gross Salary: AED ${amount.toLocaleString()}`;
+      document.getElementById("payModal").classList.add("active");
+    }
+    function closePayModal() { document.getElementById("payModal").classList.remove("active"); }
+
+    function confirmMarkPaid() {
+      const empId = document.getElementById("payEmpId").value;
+      const month = document.getElementById("payMonth").value;
+      const payDate = document.getElementById("paySettlementDate").value;
+
+      appState.salaryPayments = appState.salaryPayments.filter(p => !(p.employeeId === empId && p.month === month));
+      appState.salaryPayments.push({ id: "pay_" + Date.now(), employeeId: empId, month, paymentStatus: "Paid", paymentDate: payDate });
+      saveState(); closePayModal(); renderSalarySheet(); renderDashboard(); showToast("Salary marked Paid", "success");
+    }
+
+    function printPaySlip(empId, month, basic, otHours, otPay, gross, status) {
+      const emp = appState.employees.find(e => e.id === empId);
+      if (!emp) return;
+      document.getElementById("slipEmpName").textContent = emp.name;
+      document.getElementById("slipEmpRole").textContent = emp.designation;
+      document.getElementById("slipPayMonth").textContent = month;
+      document.getElementById("slipStatus").textContent = status.toUpperCase();
+      document.getElementById("slipBasic").textContent = basic.toFixed(2);
+      document.getElementById("slipOtHours").textContent = `${otHours.toFixed(1)} hrs @ 6.5 AED`;
+      document.getElementById("slipOtPay").textContent = otPay.toFixed(2);
+      document.getElementById("slipGross").textContent = gross.toFixed(2);
+      document.getElementById("slipModal").classList.add("active");
+    }
+    function closeSlipModal() { document.getElementById("slipModal").classList.remove("active"); }
+
+    function renderEmployeeList() {
+      const tbody = document.getElementById("employeeTbody");
+      tbody.innerHTML = "";
+      appState.employees.forEach(emp => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td style="font-weight: 700;">${emp.name}</td>
+          <td>${emp.designation}</td>
+          <td style="color: var(--color-emerald); font-weight: 600;">AED ${emp.monthlySalary.toLocaleString()}</td>
+          <td>${emp.joinDate || '-'}</td>
+          <td>${emp.phone || '-'}</td>
+          <td><span class="badge ${emp.status === 'active' ? 'badge-present' : 'badge-absent'}">${emp.status.toUpperCase()}</span></td>
+          <td>
+            <div style="display: flex; gap: 0.3rem;">
+              <button class="btn btn-secondary btn-sm" onclick="editEmployee('${emp.id}')">Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="toggleEmployeeStatus('${emp.id}')">${emp.status === 'active' ? 'Archive' : 'Activate'}</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openAddEmployeeModal() {
+      document.getElementById("empEditId").value = "";
+      document.getElementById("empName").value = "";
+      document.getElementById("empSalary").value = "";
+      document.getElementById("employeeModal").classList.add("active");
+    }
+    function closeEmployeeModal() { document.getElementById("employeeModal").classList.remove("active"); }
+
+    function editEmployee(empId) {
+      const emp = appState.employees.find(e => e.id === empId);
+      if (!emp) return;
+      document.getElementById("empEditId").value = emp.id;
+      document.getElementById("empName").value = emp.name;
+      document.getElementById("empDesignation").value = emp.designation;
+      document.getElementById("empSalary").value = emp.monthlySalary;
+      document.getElementById("employeeModal").classList.add("active");
+    }
+
+    function saveEmployee() {
+      const id = document.getElementById("empEditId").value;
+      const name = document.getElementById("empName").value.trim();
+      const designation = document.getElementById("empDesignation").value;
+      const monthlySalary = parseFloat(document.getElementById("empSalary").value) || 0;
+      if (!name || monthlySalary <= 0) return;
+
+      if (id) {
+        const emp = appState.employees.find(e => e.id === id);
+        if (emp) { emp.name = name; emp.designation = designation; emp.monthlySalary = monthlySalary; }
+      } else {
+        appState.employees.push({ id: "emp_" + Date.now(), name, designation, monthlySalary, joinDate: new Date().toISOString().split("T")[0], status: "active" });
+      }
+      saveState(); closeEmployeeModal(); renderEmployeeList(); showToast("Employee saved", "success");
+    }
+
+    function toggleEmployeeStatus(empId) {
+      const emp = appState.employees.find(e => e.id === empId);
+      if (emp) { emp.status = emp.status === "active" ? "inactive" : "active"; saveState(); renderEmployeeList(); populateSiteDropdowns(); }
+    }
+
+    function renderSitesList() {
+      const container = document.getElementById("sitesListContainer");
+      container.innerHTML = "";
+      appState.sites.forEach(site => {
+        const div = document.createElement("div");
+        div.className = "card";
+        div.style.margin = "0";
+        div.innerHTML = `
+          <div class="card-header"><div class="card-title">${site.siteName}</div><span class="badge ${site.status === 'active' ? 'badge-present' : 'badge-absent'}">${site.status.toUpperCase()}</span></div>
+          <div style="font-size: 0.85rem;">☀️ Day: 07:00 - 15:30 | 🌙 Night: 21:00 - 05:30</div>
+          <div style="margin-top: 1rem;" class="admin-only"><button class="btn btn-secondary btn-sm" onclick="toggleSiteStatus('${site.id}')">${site.status === 'active' ? 'Mark Completed' : 'Activate'}</button></div>
+        `;
+        container.appendChild(div);
+      });
+      updateRoleUI();
+    }
+
+    function openAddSiteModal() { document.getElementById("siteNameInput").value = ""; document.getElementById("siteModal").classList.add("active"); }
+    function closeSiteModal() { document.getElementById("siteModal").classList.remove("active"); }
+    function saveSite() {
+      const name = document.getElementById("siteNameInput").value.trim();
+      if (!name) return;
+      appState.sites.push({ id: "site_" + Date.now(), siteName: name, status: "active", shifts: { Day: { normalStart: "07:00", normalEnd: "15:30" }, Night: { normalStart: "21:00", normalEnd: "05:30" } } });
+      saveState(); closeSiteModal(); renderSitesList(); populateSiteDropdowns();
+    }
+    function toggleSiteStatus(siteId) {
+      const site = appState.sites.find(s => s.id === siteId);
+      if (site) { site.status = site.status === "active" ? "completed" : "active"; saveState(); renderSitesList(); populateSiteDropdowns(); }
+    }
+
+    function exportAttendanceCSV() {
+      let csv = "Date,Employee Name,Site,Shift,Status,Start Time,End Time,OT Hours,Work Type,Remarks\n";
+      appState.attendance.forEach(a => { csv += `"${a.workingDate}","${a.employeeName}","${a.siteName}","${a.shiftType}","${a.status}","${a.timeStart}","${a.timeEnd}",${a.overtimeHours || 0},"${a.workType || ''}","${a.remark || ''}"\n`; });
+      downloadFile(csv, `MFA_Attendance_${new Date().toISOString().split("T")[0]}.csv`, "text/csv");
+    }
+    function exportSalaryCSV() {
+      const month = document.getElementById("salaryMonthPicker").value;
+      let csv = "Employee Name,Designation,Basic Salary AED,OT Hours,OT Pay AED,Gross Pay AED,Status\n";
+      appState.employees.forEach(emp => {
+        const empLogs = appState.attendance.filter(a => a.employeeId === emp.id && a.workingDate.startsWith(month) && a.status === "present");
+        const otHours = empLogs.reduce((acc, l) => acc + (l.overtimeHours || 0), 0);
+        const otPay = otHours * (appState.settings.otRate || 6.5);
+        const basic = emp.monthlySalary || 0;
+        csv += `"${emp.name}","${emp.designation}",${basic},${otHours},${otPay},${basic + otPay},"Pending"\n`;
+      });
+      downloadFile(csv, `MFA_Salary_Sheet_${month}.csv`, "text/csv");
+    }
+    function exportSiteLogCSV() {
+      let csv = "Date,Site Name,Shift,Work Type,Completed SqM,Bags Used\n";
+      appState.siteDailyLogs.forEach(l => { csv += `"${l.workingDate}","${l.siteName}","${l.shiftType}","${l.workType}",${l.areaCompletedSqm},${l.materialBagsUsed}\n`; });
+      downloadFile(csv, `MFA_Site_Logs.csv`, "text/csv");
+    }
+    function downloadFile(content, fileName, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a"); a.href = url; a.download = fileName; a.click(); URL.revokeObjectURL(url);
+    }
+
+    function saveSettings() {
+      appState.settings.otRate = parseFloat(document.getElementById("settingOtRate").value) || 6.5;
+      saveState(); showToast("Settings updated", "success"); renderSalarySheet();
+    }
+    function exportDatabaseJSON() { downloadFile(JSON.stringify(appState, null, 2), `MFA_Backup.json`, "application/json"); }
+    function resetSeedData() { if (confirm("Reset demo data?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } }
+
+    function showToast(message, type = "info") {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => { toast.style.opacity = "0"; setTimeout(() => toast.remove(), 300); }, 3000);
+    }
+  </script>
+</body>
+</html>
