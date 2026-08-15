@@ -1498,6 +1498,7 @@
       const siteId = document.getElementById("attSiteSelect").value;
       const shiftType = document.getElementById("attShiftSelect").value;
       const workingDate = document.getElementById("attWorkingDate").value;
+      const currentSiteWorkType = document.getElementById("siteLogWorkType").value;
 
       const container = document.getElementById("attWorkerList");
       container.innerHTML = "";
@@ -1512,6 +1513,7 @@
         const timeStart = existing ? existing.timeStart : defaultTimes.normalStart;
         const timeEnd = existing ? existing.timeEnd : defaultTimes.normalEnd;
         const otHours = existing ? existing.overtimeHours : calcOvertimeHours(timeStart, timeEnd, defaultTimes);
+        const workType = existing ? existing.workType : currentSiteWorkType;
         const remark = existing ? existing.remark : "";
 
         const card = document.createElement("div");
@@ -1523,7 +1525,7 @@
               <div class="avatar-icon">${emp.name.charAt(0)}</div>
               <div>
                 <div class="worker-name">${emp.name}</div>
-                <div class="worker-role">${emp.designation}</div>
+                <div class="worker-role">${emp.designation} <span style="color: var(--color-cyan); font-size: 0.7rem;">• Multi-Skilled</span></div>
               </div>
             </div>
             <div class="status-toggle-group">
@@ -1536,8 +1538,20 @@
             <div class="form-group"><label class="form-label">End</label><input type="time" class="form-input emp-time-end" value="${timeEnd}" onchange="recalcWorkerOT(this)"></div>
             <div class="form-group"><label class="form-label">OT (Hrs)</label><input type="number" step="0.5" class="form-input emp-ot-hours" value="${otHours}"></div>
           </div>
-          <div class="form-group" style="${!isPresent ? 'display:none;' : ''}">
-            <input type="text" class="form-input emp-remark" placeholder="Individual remark" value="${remark}">
+          <div class="form-grid" style="${!isPresent ? 'display:none;' : ''}; margin-bottom: 0;">
+            <div class="form-group">
+              <label class="form-label">Work Type Performed Today</label>
+              <select class="form-select emp-work-type">
+                <option value="Normal Plaster" ${workType === 'Normal Plaster' ? 'selected' : ''}>Normal Plaster</option>
+                <option value="Decorative Plaster" ${workType === 'Decorative Plaster' ? 'selected' : ''}>Decorative Plaster</option>
+                <option value="Art Work" ${workType === 'Art Work' ? 'selected' : ''}>Art Work</option>
+                <option value="Other" ${workType === 'Other' ? 'selected' : ''}>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Individual Remarks</label>
+              <input type="text" class="form-input emp-remark" placeholder="e.g. Completed wall section" value="${remark}">
+            </div>
           </div>
         `;
         container.appendChild(card);
@@ -1549,11 +1563,11 @@
       card.querySelectorAll(".status-toggle-btn").forEach(b => b.className = "status-toggle-btn");
       if (status === "present") {
         btn.classList.add("active-present");
-        card.querySelectorAll(".worker-time-inputs, .form-group").forEach(el => el.style.display = "");
+        card.querySelectorAll(".worker-time-inputs, .form-grid").forEach(el => el.style.display = "");
       } else {
         btn.classList.add("active-absent");
         card.querySelector(".worker-time-inputs").style.display = "none";
-        card.querySelector(".emp-remark").parentElement.style.display = "none";
+        card.querySelector(".form-grid").style.display = "none";
       }
     }
 
@@ -1604,12 +1618,12 @@
       const siteName = siteObj ? siteObj.siteName : "Site";
 
       const workTypeSel = document.getElementById("siteLogWorkType").value;
-      const workType = workTypeSel === "Other" ? (document.getElementById("siteLogCustomWorkType").value || "Other") : workTypeSel;
+      const primaryWorkType = workTypeSel === "Other" ? (document.getElementById("siteLogCustomWorkType").value || "Other") : workTypeSel;
       const areaSqm = parseFloat(document.getElementById("siteLogAreaSqm").value) || 0;
       const bagsUsed = parseFloat(document.getElementById("siteLogBagsUsed").value) || 0;
 
       appState.siteDailyLogs = appState.siteDailyLogs.filter(l => !(l.siteId === siteId && l.shiftType === shiftType && l.workingDate === workingDate));
-      appState.siteDailyLogs.push({ id: "log_" + Date.now(), siteId, siteName, shiftType, workType, workingDate, areaCompletedSqm: areaSqm, materialBagsUsed: bagsUsed, remark: "", createdBy: appState.userEmail });
+      appState.siteDailyLogs.push({ id: "log_" + Date.now(), siteId, siteName, shiftType, workType: primaryWorkType, workingDate, areaCompletedSqm: areaSqm, materialBagsUsed: bagsUsed, remark: "", createdBy: appState.userEmail });
 
       document.querySelectorAll(".worker-row-card").forEach(card => {
         const empId = card.dataset.empId;
@@ -1618,6 +1632,7 @@
         const timeStart = card.querySelector(".emp-time-start").value;
         const timeEnd = card.querySelector(".emp-time-end").value;
         const overtimeHours = parseFloat(card.querySelector(".emp-ot-hours").value) || 0;
+        const workerWorkType = card.querySelector(".emp-work-type") ? card.querySelector(".emp-work-type").value : primaryWorkType;
         const remark = card.querySelector(".emp-remark").value.trim();
 
         appState.attendance = appState.attendance.filter(a => !(a.employeeId === empId && a.workingDate === workingDate && a.siteId === siteId && a.shiftType === shiftType));
@@ -1628,7 +1643,7 @@
           siteId,
           siteName,
           shiftType,
-          workType,
+          workType: workerWorkType,
           workingDate,
           timeStart,
           timeEnd,
