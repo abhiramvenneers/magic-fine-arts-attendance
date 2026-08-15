@@ -732,7 +732,9 @@
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- ==========================================
+       TOP HEADER & USER ROLE BADGE
+       ========================================== -->
   <header class="app-header">
     <div class="header-container">
       <div class="brand-group">
@@ -744,7 +746,7 @@
       </div>
       <div class="user-controls">
         <span id="headerRoleBadge" class="role-badge admin">
-          <span>👑 Admin</span>
+          <span>Admin</span>
         </span>
         <button class="btn-login-toggle" onclick="openAuthModal()">
           <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
@@ -754,37 +756,41 @@
     </div>
   </header>
 
-  <!-- DESKTOP NAV -->
+  <!-- ==========================================
+       DESKTOP NAVIGATION BAR
+       ========================================== -->
   <nav class="desktop-nav">
     <div class="nav-container">
       <button class="nav-btn active" data-tab="dashboard" onclick="switchTab('dashboard')">
-        <span>📊 Dashboard</span>
+        <span>Dashboard</span>
       </button>
       <button class="nav-btn" data-tab="attendance" onclick="switchTab('attendance')">
-        <span>📝 Mark Attendance</span>
+        <span>Mark Attendance</span>
       </button>
       <button class="nav-btn" data-tab="history" onclick="switchTab('history')">
-        <span>📜 Attendance & Site History</span>
+        <span>Logs & History</span>
       </button>
       <button class="nav-btn admin-only" data-tab="salary" onclick="switchTab('salary')">
-        <span>💰 Salary Sheet</span>
+        <span>Salary Sheet</span>
       </button>
       <button class="nav-btn admin-only" data-tab="employees" onclick="switchTab('employees')">
-        <span>👷 Employees</span>
+        <span>Employees</span>
       </button>
       <button class="nav-btn" data-tab="sites" onclick="switchTab('sites')">
-        <span>🏗️ Sites & Shifts</span>
+        <span>Sites & Shifts</span>
       </button>
       <button class="nav-btn" data-tab="reports" onclick="switchTab('reports')">
-        <span>📈 Reports</span>
+        <span>Reports</span>
       </button>
       <button class="nav-btn" data-tab="settings" onclick="switchTab('settings')">
-        <span>⚙️ Settings</span>
+        <span>Settings</span>
       </button>
     </div>
   </nav>
 
-  <!-- MAIN CONTAINER -->
+  <!-- ==========================================
+       MAIN CONTENT CONTAINER
+       ========================================== -->
   <main class="main-container">
 
     <!-- DASHBOARD -->
@@ -793,7 +799,7 @@
         <div class="kpi-card emerald">
           <div class="kpi-label">Today's Present Crew</div>
           <div class="kpi-value" id="kpiPresentCount">0 / 0</div>
-          <div class="kpi-subtext" id="kpiPresentPercent">0% attendance logged</div>
+          <div class="kpi-subtext" id="kpiPresentPercent">0% attendance logged today</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Active Job Sites</div>
@@ -814,18 +820,18 @@
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title">⚡ Quick Actions</div>
+          <div class="card-title">Quick Actions</div>
         </div>
         <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-          <button class="btn btn-primary" onclick="switchTab('attendance')">📝 Mark Site Attendance</button>
-          <button class="btn btn-emerald admin-only" onclick="switchTab('salary')">💰 Review Salary Sheet</button>
-          <button class="btn btn-secondary" onclick="switchTab('history')">📜 View Today's Logs</button>
+          <button class="btn btn-primary" onclick="switchTab('attendance')">Mark Site Attendance</button>
+          <button class="btn btn-emerald admin-only" onclick="switchTab('salary')">Review Salary Sheet</button>
+          <button class="btn btn-secondary" onclick="switchTab('history')">View Today's Logs</button>
         </div>
       </div>
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title">🏗️ Today's Site Attendance Summary</div>
+          <div class="card-title">Today's Site Attendance Summary</div>
           <span class="badge badge-shift" id="dashTodayDate">2026-08-15</span>
         </div>
         <div id="dashSiteSummaryList"></div>
@@ -836,7 +842,7 @@
     <section id="tab-attendance" class="tab-content">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">📍 Select Site & Shift Details</div>
+          <div class="card-title">Select Site & Shift Details</div>
         </div>
         <div class="form-grid">
           <div class="form-group">
@@ -860,7 +866,7 @@
       <!-- Site Daily Progress Card -->
       <div class="card">
         <div class="card-header">
-          <div class="card-title">📊 Site Daily Progress Log (Shift Total)</div>
+          <div class="card-title">Site Daily Progress Log</div>
           <span class="badge badge-shift">Logged 1x Per Shift</span>
         </div>
         <div class="form-grid">
@@ -895,12 +901,12 @@
       <!-- Worker Attendance Card -->
       <div class="card">
         <div class="card-header">
-          <div class="card-title">👥 Crew Attendance & Overtime Log</div>
-          <button class="btn btn-secondary btn-sm" onclick="applyQuickFillCrewTimes()">⚡ Auto-fill Shift Hours</button>
+          <div class="card-title">Crew Attendance & Overtime Log</div>
+          <button class="btn btn-secondary btn-sm" onclick="applyQuickFillCrewTimes()">Auto-fill Shift Hours</button>
         </div>
         <div id="attWorkerList"></div>
         <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
-          <button class="btn btn-primary" onclick="saveAttendanceAndSiteLog()">💾 Save Site Attendance & Daily Log</button>
+          <button class="btn btn-primary" onclick="saveAttendanceAndSiteLog()">Save Attendance & Daily Log</button>
         </div>
       </div>
     </section>
@@ -909,7 +915,7 @@
     <section id="tab-history" class="tab-content">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">🔍 Filters & Log History</div>
+          <div class="card-title">Filters & History</div>
         </div>
         <div class="form-grid">
           <div class="form-group">
@@ -989,7 +995,7 @@
     <section id="tab-salary" class="tab-content admin-only">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">💰 Monthly Salary Sheet & Overtime Register</div>
+          <div class="card-title">Monthly Salary Sheet & Overtime Register</div>
           <div style="display: flex; gap: 0.5rem; align-items: center;">
             <label class="form-label" style="margin: 0;">Select Month:</label>
             <input type="month" id="salaryMonthPicker" class="form-input" style="padding: 0.4rem;" onchange="renderSalarySheet()">
@@ -1041,8 +1047,8 @@
     <section id="tab-employees" class="tab-content admin-only">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">👷 Employee Roster Management</div>
-          <button class="btn btn-primary btn-sm" onclick="openAddEmployeeModal()">+ Add New Employee</button>
+          <div class="card-title">Employee Management</div>
+          <button class="btn btn-primary btn-sm" onclick="openAddEmployeeModal()">+ Add Employee</button>
         </div>
         <div class="table-responsive">
           <table class="custom-table">
@@ -1067,8 +1073,8 @@
     <section id="tab-sites" class="tab-content">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">🏗️ Job Sites & Shift Configurations</div>
-          <button class="btn btn-primary btn-sm admin-only" onclick="openAddSiteModal()">+ Add New Site</button>
+          <div class="card-title">Job Sites & Shifts</div>
+          <button class="btn btn-primary btn-sm admin-only" onclick="openAddSiteModal()">+ Add Site</button>
         </div>
         <div id="sitesListContainer" class="form-grid"></div>
       </div>
@@ -1078,20 +1084,20 @@
     <section id="tab-reports" class="tab-content">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">📈 Reports & Data Export Engine</div>
+          <div class="card-title">Reports & Data Export</div>
         </div>
         <div class="form-grid">
           <div class="card" style="margin: 0; background: var(--bg-secondary);">
-            <h4 style="margin-bottom: 0.5rem; color: var(--accent-indigo);">📝 Export Attendance Logs</h4>
-            <button class="btn btn-primary btn-sm" onclick="exportAttendanceCSV()">📥 Download Attendance CSV</button>
+            <h4 style="margin-bottom: 0.5rem; color: var(--accent-indigo);">Export Attendance Logs</h4>
+            <button class="btn btn-primary btn-sm" onclick="exportAttendanceCSV()">Download Attendance CSV</button>
           </div>
           <div class="card admin-only" style="margin: 0; background: var(--bg-secondary);">
-            <h4 style="margin-bottom: 0.5rem; color: var(--color-emerald);">💰 Export Monthly Salary Sheet</h4>
-            <button class="btn btn-emerald btn-sm" onclick="exportSalaryCSV()">📥 Download Salary CSV</button>
+            <h4 style="margin-bottom: 0.5rem; color: var(--color-emerald);">Export Monthly Salary Sheet</h4>
+            <button class="btn btn-emerald btn-sm" onclick="exportSalaryCSV()">Download Salary CSV</button>
           </div>
           <div class="card" style="margin: 0; background: var(--bg-secondary);">
-            <h4 style="margin-bottom: 0.5rem; color: var(--color-amber);">📊 Export Site Productivity Logs</h4>
-            <button class="btn btn-amber btn-sm" onclick="exportSiteLogCSV()">📥 Download Site Logs CSV</button>
+            <h4 style="margin-bottom: 0.5rem; color: var(--color-amber);">Export Site Productivity Logs</h4>
+            <button class="btn btn-amber btn-sm" onclick="exportSiteLogCSV()">Download Site Logs CSV</button>
           </div>
         </div>
       </div>
@@ -1101,7 +1107,7 @@
     <section id="tab-settings" class="tab-content">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">⚙️ Company & System Settings</div>
+          <div class="card-title">System Settings</div>
         </div>
         <div class="form-grid">
           <div class="form-group">
@@ -1114,17 +1120,17 @@
           </div>
         </div>
         <div class="admin-only" style="margin-top: 1rem;">
-          <button class="btn btn-primary btn-sm" onclick="saveSettings()">💾 Save Settings</button>
+          <button class="btn btn-primary btn-sm" onclick="saveSettings()">Save Settings</button>
         </div>
       </div>
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title">💾 Backup & Database Management</div>
+          <div class="card-title">Database Backup</div>
         </div>
         <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-          <button class="btn btn-secondary btn-sm" onclick="exportDatabaseJSON()">📥 Export Backup (JSON)</button>
-          <button class="btn btn-danger btn-sm admin-only" onclick="resetSeedData()">🔄 Reset Demo Data</button>
+          <button class="btn btn-secondary btn-sm" onclick="exportDatabaseJSON()">Export Backup (JSON)</button>
+          <button class="btn btn-danger btn-sm admin-only" onclick="resetSeedData()">Reset Demo Data</button>
         </div>
       </div>
     </section>
@@ -1137,7 +1143,7 @@
       <span>Home</span>
     </button>
     <button class="mobile-nav-btn" data-tab="attendance" onclick="switchTab('attendance')">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
       <span>Attendance</span>
     </button>
     <button class="mobile-nav-btn" data-tab="history" onclick="switchTab('history')">
@@ -1158,14 +1164,14 @@
   <div id="authModal" class="modal-overlay">
     <div class="modal-card">
       <div class="card-header">
-        <div class="card-title">🔐 Role & Account Settings</div>
+        <div class="card-title">Role & Account Settings</div>
         <button class="btn btn-secondary btn-sm" onclick="closeAuthModal()">✕</button>
       </div>
       <div class="form-group" style="margin-bottom: 1.25rem;">
         <label class="form-label">Quick Switch Role Mode:</label>
         <div style="display: flex; gap: 0.5rem; margin-top: 0.4rem;">
-          <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="setRole('Admin')">👑 Switch to Admin Mode</button>
-          <button class="btn btn-emerald btn-sm" style="flex: 1;" onclick="setRole('Supervisor')">👷 Switch to Supervisor Mode</button>
+          <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="setRole('Admin')">Switch to Admin Mode</button>
+          <button class="btn btn-emerald btn-sm" style="flex: 1;" onclick="setRole('Supervisor')">Switch to Supervisor Mode</button>
         </div>
       </div>
     </div>
@@ -1174,7 +1180,7 @@
   <div id="employeeModal" class="modal-overlay">
     <div class="modal-card">
       <div class="card-header">
-        <div class="card-title" id="empModalTitle">👷 Add Employee</div>
+        <div class="card-title" id="empModalTitle">Add Employee</div>
         <button class="btn btn-secondary btn-sm" onclick="closeEmployeeModal()">✕</button>
       </div>
       <input type="hidden" id="empEditId">
@@ -1212,7 +1218,7 @@
   <div id="siteModal" class="modal-overlay">
     <div class="modal-card">
       <div class="card-header">
-        <div class="card-title">🏗️ Add Job Site</div>
+        <div class="card-title">Add Job Site</div>
         <button class="btn btn-secondary btn-sm" onclick="closeSiteModal()">✕</button>
       </div>
       <div class="form-group" style="margin-bottom: 0.75rem;">
@@ -1233,7 +1239,7 @@
   <div id="payModal" class="modal-overlay">
     <div class="modal-card">
       <div class="card-header">
-        <div class="card-title">💳 Mark Monthly Salary as Paid</div>
+        <div class="card-title">Mark Monthly Salary as Paid</div>
         <button class="btn btn-secondary btn-sm" onclick="closePayModal()">✕</button>
       </div>
       <input type="hidden" id="payEmpId">
@@ -1250,9 +1256,9 @@
   <div id="slipModal" class="modal-overlay">
     <div class="modal-card" style="max-width: 600px;">
       <div class="card-header no-print">
-        <div class="card-title">📄 Salary Slip Preview</div>
+        <div class="card-title">Salary Slip Preview</div>
         <div style="display: flex; gap: 0.5rem;">
-          <button class="btn btn-primary btn-sm" onclick="window.print()">🖨️ Print / Save PDF</button>
+          <button class="btn btn-primary btn-sm" onclick="window.print()">Print / Save PDF</button>
           <button class="btn btn-secondary btn-sm" onclick="closeSlipModal()">✕</button>
         </div>
       </div>
