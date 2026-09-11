@@ -864,22 +864,24 @@
       </div>
     </section>
 
-    <!-- 2. ATTENDANCE -->
+    <!-- 2. ATTENDANCE WORKFLOW -->
     <section id="screen-attendance" class="screen-view">
       <div id="shiftStatusBanner" class="shift-state-banner">
         <div>
-          <strong id="shiftStatusTitle" style="font-size: 0.88rem; color: #fff;">Shift State: Ready for Morning
+          <strong id="shiftStatusTitle" style="font-size: 0.88rem; color: #fff;">Shift State: Ready for
             Check-in</strong>
           <p id="shiftStatusDesc" style="font-size: 0.72rem; color: var(--text-sub);">Mark morning check-in as draft,
-            then checkout & log materials in evening.</p>
+            then checkout & log output at shift completion.</p>
         </div>
         <span id="shiftStatusBadge" class="status-badge badge-pending">NOT STARTED</span>
       </div>
 
       <div class="mobile-card">
-        <div class="mobile-card-title"><span>1. Site, Shift & Working Date</span></div>
+        <div class="mobile-card-title">
+          <span>1. Site, Shift & Working Date</span>
+        </div>
         <div class="input-field-group">
-          <label class="input-field-label">Job Site Location</label>
+          <label class="input-field-label">Active Job Site Location</label>
           <select id="attSiteSelect" class="mobile-select" onchange="onAttSiteChange()"></select>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
@@ -899,56 +901,56 @@
 
       <div class="mobile-card">
         <div class="mobile-card-title">
-          <span>2. Crew Check-in & Hours</span>
-          <button class="role-switch-pill touch-press" onclick="applyQuickFillCrewTimes()">⚡ Auto-fill Shift</button>
+          <span>2. Crew Check-in & Hours (Standard: 10 hrs)</span>
+          <button type="button" class="role-switch-pill touch-press" onclick="applyQuickFillCrewTimes()">⚡ Auto-fill All
+            Crew</button>
         </div>
         <div id="attWorkerList"></div>
       </div>
 
       <div class="mobile-card">
         <div class="mobile-card-title">
-          <span>3. Evening Output & Material Log</span>
-          <span class="status-badge badge-pending">Evening Step</span>
+          <span>3. Site Output & Material Consumption</span>
         </div>
         <div class="input-field-group">
           <label class="input-field-label">Primary Work Executed</label>
-          <select id="siteLogWorkType" class="mobile-select" onchange="toggleCustomWorkTypeInput()">
-            <option value="Normal Plaster">Normal Plaster</option>
-            <option value="Decorative Plaster">Decorative Plaster</option>
-            <option value="Art Work">Art Work Specialist</option>
-            <option value="Other">Other (Custom Work)</option>
-          </select>
-        </div>
-        <div class="input-field-group" id="customWorkTypeGroup" style="display: none;">
-          <label class="input-field-label">Custom Work Name</label>
-          <input type="text" id="siteLogCustomWorkType" class="mobile-input" placeholder="e.g. Gypsum Arch Sculpting">
+          <div style="display: flex; flex-direction: column; gap: 0.45rem;">
+            <select id="siteLogWorkType" class="mobile-select" onchange="toggleCustomWorkTypeInput()">
+              <option value="Normal Plaster">Normal Plaster</option>
+              <option value="Decorative Plaster">Decorative Plaster</option>
+              <option value="Art Work">Art Work Specialist</option>
+              <option value="Other">Custom Work Type (Type below)</option>
+            </select>
+            <input type="text" id="siteLogCustomWorkType" class="mobile-input"
+              placeholder="Type custom work description here" style="display: none;">
+          </div>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
           <div class="input-field-group">
             <label class="input-field-label">Completed Area (SqM)</label>
             <input type="number" step="0.1" inputmode="decimal" id="siteLogAreaSqm" class="mobile-input num-font"
-              placeholder="0.0 (Evening)" oninput="calcMaterialRatio()">
+              placeholder="0.0" oninput="calcMaterialRatio()">
           </div>
           <div class="input-field-group">
             <label class="input-field-label">Material Bags Used</label>
             <input type="number" step="1" inputmode="numeric" id="siteLogBagsUsed" class="mobile-input num-font"
-              placeholder="0 (Evening)" oninput="calcMaterialRatio()">
+              placeholder="0" oninput="calcMaterialRatio()">
           </div>
         </div>
         <div
           style="background: var(--bg-surface); padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-subtle);">
-          <span style="font-size: 0.75rem; color: var(--text-sub);">Consumption Ratio:</span>
+          <span style="font-size: 0.75rem; color: var(--text-sub);">Site Consumption Ratio:</span>
           <span id="siteLogRatioDisplay" class="num-font"
             style="font-size: 0.85rem; font-weight: 700; color: var(--uae-gold);">0.00 Bags / SqM</span>
         </div>
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 1.5rem;">
-        <button class="btn-native btn-native-gold touch-press" onclick="saveShiftAttendance(true)">
-          <span>💾 Save Morning Check-In (Draft)</span>
+        <button type="button" class="btn-native btn-native-gold touch-press" onclick="saveShiftAttendance(true)">
+          <span>💾 Save Check-In as Draft</span>
         </button>
-        <button class="btn-native btn-native-green touch-press" onclick="saveShiftAttendance(false)">
-          <span>✅ Complete & Finalize Shift Attendance</span>
+        <button type="button" class="btn-native btn-native-green touch-press" onclick="saveShiftAttendance(false)">
+          <span>✅ Complete & Finalize Shift Output</span>
         </button>
       </div>
     </section>
@@ -1753,8 +1755,14 @@
     function onAttDateChange() { renderAttendanceForm(); }
 
     function toggleCustomWorkTypeInput() {
-      document.getElementById("customWorkTypeGroup").style.display = document.getElementById("siteLogWorkType").value === "Other" ? "flex" : "none";
+      const isOther = document.getElementById("siteLogWorkType").value === "Other";
+      const customInput = document.getElementById("siteLogCustomWorkType");
+      if (customInput) {
+        customInput.style.display = isOther ? "block" : "none";
+        if (isOther) customInput.focus();
+      }
     }
+
     function calcMaterialRatio() {
       const area = parseFloat(document.getElementById("siteLogAreaSqm").value) || 0;
       const bags = parseFloat(document.getElementById("siteLogBagsUsed").value) || 0;
@@ -1889,43 +1897,52 @@
       }
     }
 
-    function calcOvertimeHours(startStr, endStr, normalTimes) {
+    const STANDARD_SHIFT_HOURS = 10.0;
+
+    // Calculates OT whenever worked duration exceeds 10 hours
+    function calcOvertimeHours(startStr, endStr) {
       if (!startStr || !endStr) return 0;
-      const parseTime = (tStr) => { const [h, m] = tStr.split(":").map(Number); return h * 60 + m; };
-      let start = parseTime(startStr);
-      let end = parseTime(endStr);
+      const parseMinutes = (t) => {
+        const parts = t.split(":").map(Number);
+        return parts[0] * 60 + parts[1];
+      };
+
+      let start = parseMinutes(startStr);
+      let end = parseMinutes(endStr);
+
+      // Handles night shifts crossing midnight (e.g., 20:00 to 07:00)
       if (end < start) end += 24 * 60;
-      const actualHours = (end - start) / 60;
-      let normStart = parseTime(normalTimes.normalStart);
-      let normEnd = parseTime(normalTimes.normalEnd);
-      if (normEnd < normStart) normEnd += 24 * 60;
-      const normHours = (normEnd - normStart) / 60;
-      return Math.max(0, Math.round((actualHours - normHours) * 2) / 2);
+
+      const totalWorkedHours = (end - start) / 60;
+      const overtime = totalWorkedHours - STANDARD_SHIFT_HOURS;
+
+      return overtime > 0 ? Math.round(overtime * 2) / 2 : 0;
     }
 
     function recalcWorkerOT(input) {
       const card = input.closest(".crew-touch-card");
       const startStr = card.querySelector(".emp-time-start").value;
       const endStr = card.querySelector(".emp-time-end").value;
-      const siteId = document.getElementById("attSiteSelect").value;
-      const shiftType = document.getElementById("attShiftSelect").value;
-      const siteObj = appState.sites.find(s => s.id === siteId);
-      const defaultTimes = siteObj && siteObj.shifts && siteObj.shifts[shiftType] ? siteObj.shifts[shiftType] : { normalStart: "07:00", normalEnd: "15:30" };
-      card.querySelector(".emp-ot-hours").value = calcOvertimeHours(startStr, endStr, defaultTimes);
+      card.querySelector(".emp-ot-hours").value = calcOvertimeHours(startStr, endStr);
     }
 
+    // Auto-fills all crew members from the first person's time inputs
     function applyQuickFillCrewTimes() {
-      const siteId = document.getElementById("attSiteSelect").value;
-      const shiftType = document.getElementById("attShiftSelect").value;
-      const siteObj = appState.sites.find(s => s.id === siteId);
-      const defaultTimes = siteObj && siteObj.shifts && siteObj.shifts[shiftType] ? siteObj.shifts[shiftType] : { normalStart: "07:00", normalEnd: "15:30" };
+      const cards = document.querySelectorAll(".crew-touch-card");
+      if (cards.length === 0) return;
 
-      document.querySelectorAll(".crew-touch-card").forEach(card => {
-        card.querySelector(".emp-time-start").value = defaultTimes.normalStart;
-        card.querySelector(".emp-time-end").value = defaultTimes.normalEnd;
-        recalcWorkerOT(card.querySelector(".emp-time-start"));
+      const firstCard = cards[0];
+      const masterStart = firstCard.querySelector(".emp-time-start").value;
+      const masterEnd = firstCard.querySelector(".emp-time-end").value;
+      const calculatedOT = calcOvertimeHours(masterStart, masterEnd);
+
+      cards.forEach(card => {
+        card.querySelector(".emp-time-start").value = masterStart;
+        card.querySelector(".emp-time-end").value = masterEnd;
+        card.querySelector(".emp-ot-hours").value = calculatedOT;
       });
-      showToast("Shift timings applied across crew", "success");
+
+      showToast(`Filled all crew: ${masterStart} - ${masterEnd} (OT: ${calculatedOT} hrs)`, "success");
     }
 
     function saveShiftAttendance(isDraft = false) {
@@ -1995,6 +2012,17 @@
       renderHistoryLogs();
     }
 
+    // Navigates directly to the shift form with loaded details for editing
+    function editAttendanceShift(workingDate, siteId, shiftType) {
+      document.getElementById("attWorkingDate").value = workingDate;
+      document.getElementById("attSiteSelect").value = siteId;
+      document.getElementById("attShiftSelect").value = shiftType;
+
+      onAttSiteChange();
+      switchTab("attendance");
+      showToast(`Editing: ${workingDate} (${shiftType})`, "info");
+    }
+
     function renderHistoryLogs() {
       const startDate = document.getElementById("histStartDate").value;
       const endDate = document.getElementById("histEndDate").value;
@@ -2021,7 +2049,12 @@
             <td>${l.isDraft ? '<span class="status-badge badge-pending">DRAFT</span>' : '<span class="status-badge badge-present">FINAL</span>'}</td>
             <td class="num-font">${l.status === 'present' ? l.timeStart + ' - ' + l.timeEnd : '-'}</td>
             <td class="num-font" style="font-weight: 700; color: var(--uae-gold);">${l.isDraft ? '0 hrs (Draft)' : (l.overtimeHours || 0) + ' hrs'}</td>
-            <td><button class="role-switch-pill touch-press admin-only" style="border-color: var(--uae-red); color: var(--uae-red);" onclick="deleteAttendanceLog('${l.id}')">Delete</button></td>
+            <td>
+              <div style="display: flex; gap: 0.35rem;">
+                <button type="button" class="role-switch-pill touch-press" style="border-color: var(--uae-green); color: #4ade80;" onclick="editAttendanceShift('${l.workingDate}', '${l.siteId}', '${l.shiftType}')">✏️ Edit</button>
+                <button type="button" class="role-switch-pill touch-press admin-only" style="border-color: var(--uae-red); color: var(--uae-red);" onclick="deleteAttendanceLog('${l.id}')">Delete</button>
+              </div>
+            </td>
           `;
           tbody.appendChild(tr);
         });
@@ -2047,7 +2080,12 @@
             <td class="num-font" style="font-weight: 700; color: #4ade80;">${l.areaCompletedSqm} m²</td>
             <td class="num-font" style="font-weight: 700;">${l.materialBagsUsed} bags</td>
             <td class="num-font" style="color: var(--uae-gold); font-weight: 600;">${ratio} Bags/m²</td>
-            <td><button class="role-switch-pill touch-press admin-only" style="border-color: var(--uae-red); color: var(--uae-red);" onclick="deleteSiteLog('${l.id}')">Delete</button></td>
+            <td>
+              <div style="display: flex; gap: 0.35rem;">
+                <button type="button" class="role-switch-pill touch-press" style="border-color: var(--uae-green); color: #4ade80;" onclick="editAttendanceShift('${l.workingDate}', '${l.siteId}', '${l.shiftType}')">✏️ Edit</button>
+                <button type="button" class="role-switch-pill touch-press admin-only" style="border-color: var(--uae-red); color: var(--uae-red);" onclick="deleteSiteLog('${l.id}')">Delete</button>
+              </div>
+            </td>
           `;
           tbody.appendChild(tr);
         });
