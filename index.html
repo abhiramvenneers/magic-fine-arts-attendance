@@ -744,51 +744,52 @@
 
 <body>
 
-  <!-- Login Gateway -->
+  <!-- Login Gateway (Clean Enterprise Login with Password Saving) -->
   <div id="appAuthScreen"
     style="position: fixed; inset: 0; z-index: 9999; background: var(--bg-canvas); display: flex; align-items: center; justify-content: center; padding: 1.25rem; backdrop-filter: blur(20px);">
     <div
-      style="max-width: 420px; width: 100%; background: var(--bg-surface); border: 1px solid var(--border-gold); border-radius: var(--radius-lg); padding: 1.75rem 1.25rem; box-shadow: 0 12px 40px rgba(0,0,0,0.85); display: flex; flex-direction: column; gap: 1.25rem;">
+      style="max-width: 420px; width: 100%; background: var(--bg-surface); border: 1px solid var(--border-gold); border-radius: var(--radius-lg); padding: 2rem 1.4rem; box-shadow: 0 12px 40px rgba(0,0,0,0.85); display: flex; flex-direction: column; gap: 1.25rem;">
+
       <div style="text-align: center;">
         <div
-          style="width: 52px; height: 52px; margin: 0 auto 0.75rem; border-radius: var(--radius-md); background: linear-gradient(135deg, #00993f 0%, #00732f 100%); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 800; color: #fff; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 0 16px var(--uae-green-glow);">
+          style="width: 54px; height: 54px; margin: 0 auto 0.85rem; border-radius: var(--radius-md); background: linear-gradient(135deg, #00993f 0%, #00732f 100%); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 800; color: #fff; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 0 16px var(--uae-green-glow);">
           MFA</div>
-        <h2 style="font-size: 1.15rem; font-weight: 800; color: #fff; margin: 0;">Magic Fine Arts</h2>
-        <p style="font-size: 0.75rem; color: var(--uae-gold); font-weight: 700; margin-top: 0.2rem;">Mobile Cloud
-          Attendance Portal</p>
+        <h2 style="font-size: 1.2rem; font-weight: 800; color: #fff; margin: 0;">Magic Fine Arts</h2>
+        <p style="font-size: 0.76rem; color: var(--uae-gold); font-weight: 700; margin-top: 0.25rem;">Technical Service
+          LLC • Portal Gateway</p>
       </div>
 
-      <form id="loginForm" onsubmit="handleUserLogin(event)"
-        style="display: flex; flex-direction: column; gap: 0.85rem;">
+      <!-- Standard Form attributes trigger mobile browser keychain/autofill -->
+      <form id="loginForm" name="loginForm" method="post" action="javascript:void(0);" onsubmit="handleUserLogin(event)"
+        style="display: flex; flex-direction: column; gap: 0.95rem;">
         <div class="input-field-group" style="margin: 0;">
           <label class="input-field-label">Portal Account Email</label>
-          <input type="email" id="loginEmailInput" class="mobile-input num-font" placeholder="name@magicfineart.ae"
-            required autocomplete="username">
+          <input type="email" id="loginEmailInput" name="username" class="mobile-input num-font"
+            placeholder="name@magicfineart.ae" required autocomplete="username" autocapitalize="none" autocorrect="off">
         </div>
 
         <div class="input-field-group" style="margin: 0;">
           <label class="input-field-label">Account Password</label>
-          <input type="password" id="loginPasswordInput" class="mobile-input num-font" placeholder="••••••••" required
-            autocomplete="current-password">
+          <input type="password" id="loginPasswordInput" name="password" class="mobile-input num-font"
+            placeholder="••••••••" required autocomplete="current-password">
         </div>
 
-        <button type="submit" class="btn-native btn-native-green touch-press" style="margin-top: 0.35rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 0.15rem;">
+          <label
+            style="display: flex; align-items: center; gap: 0.45rem; font-size: 0.78rem; color: var(--text-sub); cursor: pointer;">
+            <input type="checkbox" id="rememberMeCheckbox" checked
+              style="accent-color: var(--uae-green); width: 16px; height: 16px;">
+            <span>Remember on this device</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn-native btn-native-green touch-press" style="margin-top: 0.4rem;">
           <span>🔐 Sign In to Workspace</span>
         </button>
       </form>
 
-      <div
-        style="background: var(--bg-canvas); padding: 0.85rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 0.5rem;">
-        <span style="font-size: 0.7rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase;">1-Tap
-          Credentials:</span>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem;">
-          <button type="button" class="role-switch-pill touch-press" style="justify-content: center;"
-            onclick="fillLoginFields('admin@magicfineart.ae', 'admin123')">👑 Admin</button>
-          <button type="button" class="role-switch-pill touch-press"
-            style="justify-content: center; border-color: var(--uae-green); color: #4ade80;"
-            onclick="fillLoginFields('supervisor@magicfineart.ae', 'super123')">👷 Supervisor</button>
-        </div>
-      </div>
+      <p style="text-align: center; font-size: 0.72rem; color: var(--text-muted); margin: 0;">Authorized site
+        supervisors and administrative staff only.</p>
     </div>
   </div>
 
@@ -1528,7 +1529,8 @@
       setTimeout(() => location.reload(), 600);
     }
 
-    function checkAuthStatus() {
+    /* Auth Handling with Native Mobile Credential Store / Keychain Support */
+    async function checkAuthStatus() {
       const session = localStorage.getItem(AUTH_SESSION_KEY);
       const authScreen = document.getElementById("appAuthScreen");
 
@@ -1539,31 +1541,64 @@
           appState.userEmail = user.email;
           if (authScreen) authScreen.style.display = "none";
           updateRoleUI();
+          return;
         } catch (e) {
-          if (authScreen) authScreen.style.display = "flex";
+          localStorage.removeItem(AUTH_SESSION_KEY);
         }
-      } else {
-        if (authScreen) authScreen.style.display = "flex";
       }
+
+      // If no stored session, try auto-retrieving saved credentials from Safari/Chrome Password Manager
+      if (window.PasswordCredential && navigator.credentials) {
+        try {
+          const cred = await navigator.credentials.get({ password: true, mediation: "silent" });
+          if (cred && cred.id && cred.password) {
+            document.getElementById("loginEmailInput").value = cred.id;
+            document.getElementById("loginPasswordInput").value = cred.password;
+          }
+        } catch (err) {
+          console.log("Credential retrieval note:", err);
+        }
+      }
+
+      if (authScreen) authScreen.style.display = "flex";
     }
 
-    function fillLoginFields(email, pass) {
-      document.getElementById("loginEmailInput").value = email;
-      document.getElementById("loginPasswordInput").value = pass;
-    }
 
-    function handleUserLogin(e) {
-      e.preventDefault();
+
+    async function handleUserLogin(e) {
+      if (e) e.preventDefault();
+
       const email = document.getElementById("loginEmailInput").value.trim().toLowerCase();
       const password = document.getElementById("loginPasswordInput").value.trim();
+      const remember = document.getElementById("rememberMeCheckbox") ? document.getElementById("rememberMeCheckbox").checked : true;
 
       const account = VALID_ACCOUNTS[email];
       if (!account || account.password !== password) {
-        showToast("Invalid credentials", "danger");
+        showToast("Invalid email or password", "danger");
         return;
       }
 
-      localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify({ email, role: account.role }));
+      // 1. Trigger the native browser/OS "Save Password" dialog
+      if (window.PasswordCredential && navigator.credentials) {
+        try {
+          const cred = new PasswordCredential({
+            id: email,
+            password: password,
+            name: account.label
+          });
+          await navigator.credentials.store(cred);
+        } catch (credErr) {
+          console.log("Browser password store skipped:", credErr);
+        }
+      }
+
+      // 2. Persist local app session
+      if (remember) {
+        localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify({ email, role: account.role }));
+      } else {
+        sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify({ email, role: account.role }));
+      }
+
       appState.userRole = account.role;
       appState.userEmail = email;
 
@@ -1574,9 +1609,19 @@
       showToast(`Signed in as ${account.label}`, "success");
     }
 
-    function handleUserLogout() {
+    async function handleUserLogout() {
       if (!confirm("Log out from this device?")) return;
+
+      // Prevent silent auto-login on immediate reload
+      if (navigator.credentials && navigator.credentials.preventSilentAccess) {
+        try {
+          await navigator.credentials.preventSilentAccess();
+        } catch (e) { }
+      }
+
       localStorage.removeItem(AUTH_SESSION_KEY);
+      sessionStorage.removeItem(AUTH_SESSION_KEY);
+
       document.getElementById("loginEmailInput").value = "";
       document.getElementById("loginPasswordInput").value = "";
       document.getElementById("appAuthScreen").style.display = "flex";
