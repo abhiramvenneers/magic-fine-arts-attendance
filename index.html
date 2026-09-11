@@ -8,10 +8,9 @@
   <title>Magic Fine Arts - Mobile Attendance & Payroll</title>
 
   <meta name="description"
-    content="Mobile-first site attendance, draft check-in, checkout, and payroll system for Magic Fine Arts Technical Service LLC.">
+    content="Mobile-first site attendance, check-in, checkout, and payroll system for Magic Fine Arts Technical Service LLC.">
   <meta name="theme-color" content="#050b08">
 
-  <!-- iOS & Android Web App Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MFA Crew">
@@ -20,7 +19,6 @@
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
 
-  <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -33,7 +31,6 @@
       --bg-surface: #0b1712;
       --bg-surface-elevated: #13261e;
       --bg-surface-card: #0e1c16;
-      --bg-surface-active: #1a382b;
       --bg-glass: rgba(11, 23, 18, 0.92);
 
       --uae-green: #00732f;
@@ -46,7 +43,6 @@
       --uae-red-glow: rgba(224, 25, 35, 0.28);
 
       --uae-gold: #d4af37;
-      --uae-gold-light: #f59e0b;
       --uae-gold-surface: rgba(212, 175, 55, 0.16);
       --uae-gold-glow: rgba(212, 175, 55, 0.28);
 
@@ -123,7 +119,6 @@
       filter: brightness(0.92);
     }
 
-    /* Top Bar */
     .mobile-top-header {
       position: fixed;
       top: 0;
@@ -170,11 +165,10 @@
       line-height: 1.15;
     }
 
-    .header-title-box span {
+    .header-title-box div {
       font-size: 0.68rem;
       font-weight: 700;
       color: var(--uae-gold);
-      display: block;
     }
 
     .header-actions {
@@ -192,7 +186,7 @@
       border-radius: var(--radius-full);
       font-size: 0.75rem;
       font-weight: 700;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 0.35rem;
       cursor: pointer;
@@ -222,7 +216,6 @@
       border: 1px solid rgba(212, 175, 55, 0.35);
     }
 
-    /* Bottom Nav */
     .native-bottom-nav {
       position: fixed;
       bottom: 0;
@@ -286,7 +279,6 @@
       background: var(--uae-gold);
     }
 
-    /* Screen Layout */
     .app-screen-container {
       max-width: 680px;
       width: 100%;
@@ -424,11 +416,6 @@
       line-height: 1.1;
     }
 
-    .metric-tile-sub {
-      font-size: 0.68rem;
-      color: var(--text-muted);
-    }
-
     .input-field-group {
       display: flex;
       flex-direction: column;
@@ -496,12 +483,6 @@
       border: 1px solid var(--border-subtle);
     }
 
-    .btn-native-red {
-      background: var(--uae-red);
-      color: #fff;
-      box-shadow: 0 4px 14px var(--uae-red-glow);
-    }
-
     .crew-touch-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
@@ -546,7 +527,7 @@
       display: block;
     }
 
-    .crew-name-box span {
+    .crew-name-box div {
       font-size: 0.75rem;
       color: var(--text-sub);
     }
@@ -744,52 +725,47 @@
 
 <body>
 
-  <!-- Login Gateway (Clean Enterprise Login with Password Saving) -->
+  <!-- Login Gateway -->
   <div id="appAuthScreen"
     style="position: fixed; inset: 0; z-index: 9999; background: var(--bg-canvas); display: flex; align-items: center; justify-content: center; padding: 1.25rem; backdrop-filter: blur(20px);">
     <div
       style="max-width: 420px; width: 100%; background: var(--bg-surface); border: 1px solid var(--border-gold); border-radius: var(--radius-lg); padding: 2rem 1.4rem; box-shadow: 0 12px 40px rgba(0,0,0,0.85); display: flex; flex-direction: column; gap: 1.25rem;">
-
       <div style="text-align: center;">
         <div
           style="width: 54px; height: 54px; margin: 0 auto 0.85rem; border-radius: var(--radius-md); background: linear-gradient(135deg, #00993f 0%, #00732f 100%); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 800; color: #fff; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 0 16px var(--uae-green-glow);">
           MFA</div>
         <h2 style="font-size: 1.2rem; font-weight: 800; color: #fff; margin: 0;">Magic Fine Arts</h2>
-        <p style="font-size: 0.76rem; color: var(--uae-gold); font-weight: 700; margin-top: 0.25rem;">Technical Service
-          LLC • Portal Gateway</p>
+        <div style="font-size: 0.76rem; color: var(--uae-gold); font-weight: 700; margin-top: 0.25rem;">Technical
+          Service LLC • Cloud Portal</div>
       </div>
 
-      <!-- Standard Form attributes trigger mobile browser keychain/autofill -->
       <form id="loginForm" name="loginForm" method="post" action="javascript:void(0);" onsubmit="handleUserLogin(event)"
         style="display: flex; flex-direction: column; gap: 0.95rem;">
         <div class="input-field-group" style="margin: 0;">
-          <label class="input-field-label">Portal Account Email</label>
+          <label class="input-field-label">Account Email</label>
           <input type="email" id="loginEmailInput" name="username" class="mobile-input num-font"
-            placeholder="name@magicfineart.ae" required autocomplete="username" autocapitalize="none" autocorrect="off">
+            placeholder="name@magicfineart.ae" required autocomplete="username" autocapitalize="none">
         </div>
 
         <div class="input-field-group" style="margin: 0;">
-          <label class="input-field-label">Account Password</label>
+          <label class="input-field-label">Password</label>
           <input type="password" id="loginPasswordInput" name="password" class="mobile-input num-font"
             placeholder="••••••••" required autocomplete="current-password">
         </div>
 
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 0.15rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
           <label
             style="display: flex; align-items: center; gap: 0.45rem; font-size: 0.78rem; color: var(--text-sub); cursor: pointer;">
             <input type="checkbox" id="rememberMeCheckbox" checked
               style="accent-color: var(--uae-green); width: 16px; height: 16px;">
-            <span>Remember on this device</span>
+            Stay signed in
           </label>
         </div>
 
         <button type="submit" class="btn-native btn-native-green touch-press" style="margin-top: 0.4rem;">
-          <span>🔐 Sign In to Workspace</span>
+          Sign In to Workspace
         </button>
       </form>
-
-      <p style="text-align: center; font-size: 0.72rem; color: var(--text-muted); margin: 0;">Authorized site
-        supervisors and administrative staff only.</p>
     </div>
   </div>
 
@@ -799,16 +775,16 @@
       <div class="header-logo-badge">MFA</div>
       <div class="header-title-box">
         <h1>Magic Fine Arts</h1>
-        <span>Technical Service LLC</span>
+        <div>Technical Service LLC</div>
       </div>
     </div>
     <div class="header-actions">
       <div id="cloudStatusBadge" class="cloud-status-badge cloud-pending touch-press" onclick="openCloudModal()">
-        <span>●</span> <span id="cloudStatusLabel">Local / Link Sheet</span>
+        <span id="cloudStatusDot">●</span>
+        <span id="cloudStatusLabel">Sheet Synced</span>
       </div>
-      <button class="role-switch-pill touch-press" onclick="handleUserLogout()">
-        <span id="headerRoleBadge">👑 Admin</span>
-        <span style="opacity: 0.6; font-size: 0.65rem;">(Logout)</span>
+      <button type="button" class="role-switch-pill touch-press" onclick="handleUserLogout()">
+        <span id="headerRoleBadge">Admin</span> (Logout)
       </button>
     </div>
   </header>
@@ -820,66 +796,56 @@
     <section id="screen-dashboard" class="screen-view active">
       <div class="metric-scroll-row">
         <div class="metric-tile">
-          <span class="metric-tile-label">Today's Crew</span>
-          <span class="metric-tile-value num-font" id="kpiPresentCount">0 / 0</span>
-          <span class="metric-tile-sub" id="kpiPresentPercent">0% logged today</span>
+          <div class="metric-tile-label">Today's Crew</div>
+          <div class="metric-tile-value num-font" id="kpiPresentCount">0 / 0</div>
         </div>
         <div class="metric-tile gold">
-          <span class="metric-tile-label">Active Sites</span>
-          <span class="metric-tile-value num-font" id="kpiActiveSites">0</span>
-          <span class="metric-tile-sub">Work locations</span>
+          <div class="metric-tile-label">Active Sites</div>
+          <div class="metric-tile-value num-font" id="kpiActiveSites">0</div>
         </div>
         <div class="metric-tile">
-          <span class="metric-tile-label">Overtime Hours</span>
-          <span class="metric-tile-value num-font" id="kpiTodayOT">0 hrs</span>
-          <span class="metric-tile-sub">Logged today</span>
+          <div class="metric-tile-label">Overtime Hours</div>
+          <div class="metric-tile-value num-font" id="kpiTodayOT">0 hrs</div>
         </div>
         <div class="metric-tile red admin-only">
-          <span class="metric-tile-label">Pending Payroll</span>
-          <span class="metric-tile-value num-font" id="kpiPendingSalary">AED 0</span>
-          <span class="metric-tile-sub">This month</span>
+          <div class="metric-tile-label">Pending Payroll</div>
+          <div class="metric-tile-value num-font" id="kpiPendingSalary">AED 0</div>
         </div>
       </div>
 
       <div class="mobile-card">
         <div class="mobile-card-title">
-          <span>Quick Actions</span>
-          <span class="status-badge badge-pending num-font" id="dashTodayDate">2026-09-11</span>
+          Quick Actions
+          <div class="num-font" id="dashTodayDate">2026-09-11</div>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-          <button class="btn-native btn-native-green touch-press" onclick="switchTab('attendance')">
-            <span>📝 Check-In / Out</span>
-          </button>
-          <button class="btn-native btn-native-gold touch-press admin-only" onclick="switchTab('salary')">
-            <span>💵 Salary Sheet</span>
-          </button>
+          <button type="button" class="btn-native btn-native-green touch-press"
+            onclick="switchTab('attendance')">Check-In / Out</button>
+          <button type="button" class="btn-native btn-native-gold touch-press admin-only"
+            onclick="switchTab('salary')">Salary Sheet</button>
         </div>
       </div>
 
       <div class="mobile-card">
-        <div class="mobile-card-title">
-          <span>Today's Worksite Progress & Stages</span>
-        </div>
+        <div class="mobile-card-title">Active Worksite Shifts</div>
         <div id="dashSiteSummaryList"></div>
       </div>
     </section>
 
-    <!-- 2. ATTENDANCE WORKFLOW -->
+    <!-- 2. ATTENDANCE -->
     <section id="screen-attendance" class="screen-view">
       <div id="shiftStatusBanner" class="shift-state-banner">
         <div>
           <strong id="shiftStatusTitle" style="font-size: 0.88rem; color: #fff;">Shift State: Ready for
             Check-in</strong>
           <p id="shiftStatusDesc" style="font-size: 0.72rem; color: var(--text-sub);">Mark morning check-in as draft,
-            then checkout & log output at shift completion.</p>
+            then checkout & log materials upon shift completion.</p>
         </div>
-        <span id="shiftStatusBadge" class="status-badge badge-pending">NOT STARTED</span>
+        <div id="shiftStatusBadge" class="status-badge badge-pending">NOT STARTED</div>
       </div>
 
       <div class="mobile-card">
-        <div class="mobile-card-title">
-          <span>1. Site, Shift & Working Date</span>
-        </div>
+        <div class="mobile-card-title">1. Site, Shift & Working Date</div>
         <div class="input-field-group">
           <label class="input-field-label">Active Job Site Location</label>
           <select id="attSiteSelect" class="mobile-select" onchange="onAttSiteChange()"></select>
@@ -888,8 +854,8 @@
           <div class="input-field-group">
             <label class="input-field-label">Shift Type</label>
             <select id="attShiftSelect" class="mobile-select" onchange="onAttShiftChange()">
-              <option value="Day">☀️ Day Shift</option>
-              <option value="Night">🌙 Night Shift</option>
+              <option value="Day">Day Shift</option>
+              <option value="Night">Night Shift</option>
             </select>
           </div>
           <div class="input-field-group">
@@ -901,17 +867,15 @@
 
       <div class="mobile-card">
         <div class="mobile-card-title">
-          <span>2. Crew Check-in & Hours (Standard: 10 hrs)</span>
-          <button type="button" class="role-switch-pill touch-press" onclick="applyQuickFillCrewTimes()">⚡ Auto-fill All
+          2. Crew Check-in & Hours (Standard: 10 hrs)
+          <button type="button" class="role-switch-pill touch-press" onclick="applyQuickFillCrewTimes()">Auto-fill All
             Crew</button>
         </div>
         <div id="attWorkerList"></div>
       </div>
 
       <div class="mobile-card">
-        <div class="mobile-card-title">
-          <span>3. Site Output & Material Consumption</span>
-        </div>
+        <div class="mobile-card-title">3. Site Output & Material Consumption</div>
         <div class="input-field-group">
           <label class="input-field-label">Primary Work Executed</label>
           <div style="display: flex; flex-direction: column; gap: 0.45rem;">
@@ -919,7 +883,7 @@
               <option value="Normal Plaster">Normal Plaster</option>
               <option value="Decorative Plaster">Decorative Plaster</option>
               <option value="Art Work">Art Work Specialist</option>
-              <option value="Other">Custom Work Type (Type below)</option>
+              <option value="Other">Custom Work Type (Enter below)</option>
             </select>
             <input type="text" id="siteLogCustomWorkType" class="mobile-input"
               placeholder="Type custom work description here" style="display: none;">
@@ -939,26 +903,24 @@
         </div>
         <div
           style="background: var(--bg-surface); padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-subtle);">
-          <span style="font-size: 0.75rem; color: var(--text-sub);">Site Consumption Ratio:</span>
-          <span id="siteLogRatioDisplay" class="num-font"
-            style="font-size: 0.85rem; font-weight: 700; color: var(--uae-gold);">0.00 Bags / SqM</span>
+          <div style="font-size: 0.75rem; color: var(--text-sub);">Site Consumption Ratio:</div>
+          <div id="siteLogRatioDisplay" class="num-font"
+            style="font-size: 0.85rem; font-weight: 700; color: var(--uae-gold);">0.00 Bags / SqM</div>
         </div>
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 1.5rem;">
-        <button type="button" class="btn-native btn-native-gold touch-press" onclick="saveShiftAttendance(true)">
-          <span>💾 Save Check-In as Draft</span>
-        </button>
-        <button type="button" class="btn-native btn-native-green touch-press" onclick="saveShiftAttendance(false)">
-          <span>✅ Complete & Finalize Shift Output</span>
-        </button>
+        <button type="button" class="btn-native btn-native-gold touch-press" onclick="saveShiftAttendance(true)">Save
+          Check-In as Draft</button>
+        <button type="button" class="btn-native btn-native-green touch-press"
+          onclick="saveShiftAttendance(false)">Complete & Finalize Shift Output</button>
       </div>
     </section>
 
     <!-- 3. LOGS -->
     <section id="screen-history" class="screen-view">
       <div class="mobile-card">
-        <div class="mobile-card-title"><span>Search & Filter</span></div>
+        <div class="mobile-card-title">Search & Filter</div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
           <div class="input-field-group">
             <label class="input-field-label">From</label>
@@ -978,9 +940,9 @@
       </div>
 
       <div style="display: flex; gap: 0.4rem; margin-bottom: 0.85rem;">
-        <button id="btnHistSubWorker" class="btn-native btn-native-green touch-press"
+        <button type="button" id="btnHistSubWorker" class="btn-native btn-native-green touch-press"
           style="height: 38px; font-size: 0.78rem;" onclick="switchHistSubTab('worker')">Crew Logs</button>
-        <button id="btnHistSubSite" class="btn-native btn-native-secondary touch-press"
+        <button type="button" id="btnHistSubSite" class="btn-native btn-native-secondary touch-press"
           style="height: 38px; font-size: 0.78rem;" onclick="switchHistSubTab('site')">Site Progress Logs</button>
       </div>
 
@@ -1031,26 +993,26 @@
     <section id="screen-salary" class="screen-view admin-only">
       <div class="mobile-card">
         <div class="mobile-card-title">
-          <span>Monthly Payroll Ledger</span>
+          Monthly Payroll Ledger
           <input type="month" id="salaryMonthPicker" class="mobile-input num-font"
             style="width: auto; padding: 0.4rem 0.6rem; font-size: 16px;" onchange="renderSalarySheet()">
         </div>
         <div class="metric-scroll-row" style="margin-bottom: 0.5rem;">
           <div class="metric-tile">
-            <span class="metric-tile-label">Basic Total</span>
-            <span class="metric-tile-value num-font" id="salKpiBasic">AED 0</span>
+            <div class="metric-tile-label">Basic Total</div>
+            <div class="metric-tile-value num-font" id="salKpiBasic">AED 0</div>
           </div>
           <div class="metric-tile gold">
-            <span class="metric-tile-label">OT Total (6.5/h)</span>
-            <span class="metric-tile-value num-font" id="salKpiOT">AED 0</span>
+            <div class="metric-tile-label">OT Total (6.5/h)</div>
+            <div class="metric-tile-value num-font" id="salKpiOT">AED 0</div>
           </div>
           <div class="metric-tile">
-            <span class="metric-tile-label">Gross Payroll</span>
-            <span class="metric-tile-value num-font" id="salKpiGross">AED 0</span>
+            <div class="metric-tile-label">Gross Payroll</div>
+            <div class="metric-tile-value num-font" id="salKpiGross">AED 0</div>
           </div>
           <div class="metric-tile red">
-            <span class="metric-tile-label">Pending Total</span>
-            <span class="metric-tile-value num-font" id="salKpiPending">AED 0</span>
+            <div class="metric-tile-label">Pending Total</div>
+            <div class="metric-tile-value num-font" id="salKpiPending">AED 0</div>
           </div>
         </div>
       </div>
@@ -1081,20 +1043,19 @@
     <section id="screen-settings" class="screen-view">
       <div class="mobile-card">
         <div class="mobile-card-title">
-          <span>Google Cloud Spreadsheet</span>
-          <span id="settingsCloudBadge" class="status-badge badge-pending">Local Cache</span>
+          Google Cloud Spreadsheet
+          <div id="settingsCloudBadge" class="status-badge badge-present">🟢 Live (Google Sheet)</div>
         </div>
         <p style="font-size: 0.78rem; color: var(--text-sub); margin-bottom: 0.85rem;">Attendance, plastering output,
           and wages sync straight to your private Google Sheet in Drive.</p>
-        <button class="btn-native btn-native-gold touch-press" style="height: 44px;" onclick="openCloudModal()">
-          <span>⚡ Link Google Sheet Webhook URL</span>
-        </button>
+        <button type="button" class="btn-native btn-native-gold touch-press" style="height: 44px;"
+          onclick="openCloudModal()">Link Google Sheet Webhook URL</button>
       </div>
 
       <div class="mobile-card admin-only">
         <div class="mobile-card-title">
-          <span>Employee Registry</span>
-          <button class="role-switch-pill touch-press" onclick="openAddEmployeeModal()">+ Add New</button>
+          Employee Registry
+          <button type="button" class="role-switch-pill touch-press" onclick="openAddEmployeeModal()">+ Add New</button>
         </div>
         <div class="mobile-table-scroll">
           <table class="native-table">
@@ -1115,40 +1076,34 @@
 
       <div class="mobile-card">
         <div class="mobile-card-title">
-          <span>Active Site Projects</span>
-          <button class="role-switch-pill touch-press admin-only" onclick="openAddSiteModal()">+ Add Site</button>
+          Active Site Projects
+          <button type="button" class="role-switch-pill touch-press admin-only" onclick="openAddSiteModal()">+ Add
+            Site</button>
         </div>
         <div id="sitesListContainer"></div>
       </div>
 
       <div class="mobile-card">
-        <div class="mobile-card-title"><span>Export Local Reports</span></div>
+        <div class="mobile-card-title">Export Local Reports</div>
         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-          <button class="btn-native btn-native-green touch-press" style="height: 42px;" onclick="exportAttendanceCSV()">
-            <span>📥 Export Attendance CSV</span>
-          </button>
-          <button class="btn-native btn-native-gold touch-press admin-only" style="height: 42px;"
-            onclick="exportSalaryCSV()">
-            <span>📥 Export Payroll CSV</span>
-          </button>
-          <button class="btn-native btn-native-secondary touch-press" style="height: 42px;"
-            onclick="exportSiteLogCSV()">
-            <span>📥 Export Site Progress CSV</span>
-          </button>
+          <button type="button" class="btn-native btn-native-green touch-press" style="height: 42px;"
+            onclick="exportAttendanceCSV()">Export Attendance CSV</button>
+          <button type="button" class="btn-native btn-native-gold touch-press admin-only" style="height: 42px;"
+            onclick="exportSalaryCSV()">Export Payroll CSV</button>
+          <button type="button" class="btn-native btn-native-secondary touch-press" style="height: 42px;"
+            onclick="exportSiteLogCSV()">Export Site Progress CSV</button>
         </div>
       </div>
 
       <div class="mobile-card admin-only">
-        <div class="mobile-card-title"><span>Overtime Policy</span></div>
+        <div class="mobile-card-title">Overtime Policy</div>
         <div class="input-field-group">
           <label class="input-field-label">Hourly Overtime Rate (AED)</label>
           <input type="number" step="0.5" inputmode="decimal" id="settingOtRate" class="mobile-input num-font"
             value="6.5">
         </div>
-        <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem;">
-          <button class="btn-native btn-native-green touch-press" style="height: 42px;" onclick="saveSettings()">Save
-            Rate</button>
-        </div>
+        <button type="button" class="btn-native btn-native-green touch-press" style="height: 42px; margin-top: 0.5rem;"
+          onclick="saveSettings()">Save Rate</button>
       </div>
     </section>
 
@@ -1156,66 +1111,62 @@
 
   <!-- Bottom Nav -->
   <nav class="native-bottom-nav">
-    <button class="nav-tab-btn active touch-press" data-screen="dashboard" onclick="switchTab('dashboard')">
+    <button type="button" class="nav-tab-btn active touch-press" data-screen="dashboard"
+      onclick="switchTab('dashboard')">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round"
           d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
         </path>
       </svg>
-      <span>Overview</span>
+      <div>Overview</div>
     </button>
-    <button class="nav-tab-btn touch-press" data-screen="attendance" onclick="switchTab('attendance')">
+    <button type="button" class="nav-tab-btn touch-press" data-screen="attendance" onclick="switchTab('attendance')">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round"
           d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4">
         </path>
       </svg>
-      <span>Attendance</span>
+      <div>Attendance</div>
     </button>
-    <button class="nav-tab-btn touch-press" data-screen="history" onclick="switchTab('history')">
+    <button type="button" class="nav-tab-btn touch-press" data-screen="history" onclick="switchTab('history')">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
       </svg>
-      <span>Logs</span>
+      <div>Logs</div>
     </button>
-    <button class="nav-tab-btn touch-press admin-only" data-screen="salary" onclick="switchTab('salary')">
+    <button type="button" class="nav-tab-btn touch-press admin-only" data-screen="salary" onclick="switchTab('salary')">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round"
           d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
         </path>
       </svg>
-      <span>Payroll</span>
+      <div>Payroll</div>
     </button>
-    <button class="nav-tab-btn touch-press" data-screen="settings" onclick="switchTab('settings')">
+    <button type="button" class="nav-tab-btn touch-press" data-screen="settings" onclick="switchTab('settings')">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round"
           d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
         </path>
       </svg>
-      <span>Settings</span>
+      <div>Settings</div>
     </button>
   </nav>
 
-  <!-- Sheet Modals -->
+  <!-- Modals -->
   <div id="cloudModal" class="mobile-sheet-overlay" onclick="closeCloudModal(event)">
     <div class="mobile-sheet-window" onclick="event.stopPropagation()">
       <div class="sheet-drag-handle"></div>
       <div class="mobile-card-title">
-        <span>Connect Google Apps Script Web App</span>
-        <button class="role-switch-pill touch-press" onclick="closeCloudModal()">✕</button>
+        Connect Google Apps Script Web App
+        <button type="button" class="role-switch-pill touch-press" onclick="closeCloudModal()">✕</button>
       </div>
-      <p style="font-size: 0.76rem; color: var(--text-sub); margin-bottom: 0.85rem;">Paste the Web app deployment URL
-        from your Google Sheet.</p>
-
       <div class="input-field-group">
         <label class="input-field-label">Apps Script Web App URL</label>
         <input type="url" id="gsScriptUrl" class="mobile-input num-font"
           placeholder="https://script.google.com/macros/s/.../exec">
       </div>
-      <button class="btn-native btn-native-green touch-press" style="margin-top: 0.5rem;"
-        onclick="saveAndConnectCloud()">
-        <span>Link &amp; Sync to Google Sheet</span>
-      </button>
+      <button type="button" class="btn-native btn-native-green touch-press" style="margin-top: 0.5rem;"
+        onclick="saveAndConnectCloud()">Link &amp; Sync to Google Sheet</button>
     </div>
   </div>
 
@@ -1223,8 +1174,8 @@
     <div class="mobile-sheet-window" onclick="event.stopPropagation()">
       <div class="sheet-drag-handle"></div>
       <div class="mobile-card-title">
-        <span id="empModalTitle">Employee Profile</span>
-        <button class="role-switch-pill touch-press" onclick="closeEmployeeModal()">✕</button>
+        <div id="empModalTitle">Employee Profile</div>
+        <button type="button" class="role-switch-pill touch-press" onclick="closeEmployeeModal()">✕</button>
       </div>
       <input type="hidden" id="empEditId">
       <div class="input-field-group">
@@ -1254,8 +1205,8 @@
         <label class="input-field-label">Phone Number</label>
         <input type="tel" inputmode="tel" id="empPhone" class="mobile-input num-font" placeholder="+971 50 123 4567">
       </div>
-      <button class="btn-native btn-native-green touch-press" style="margin-top: 0.5rem;" onclick="saveEmployee()">Save
-        Employee</button>
+      <button type="button" class="btn-native btn-native-green touch-press" style="margin-top: 0.5rem;"
+        onclick="saveEmployee()">Save Employee</button>
     </div>
   </div>
 
@@ -1263,8 +1214,8 @@
     <div class="mobile-sheet-window" onclick="event.stopPropagation()">
       <div class="sheet-drag-handle"></div>
       <div class="mobile-card-title">
-        <span>Add Job Site Location</span>
-        <button class="role-switch-pill touch-press" onclick="closeSiteModal()">✕</button>
+        Add Job Site Location
+        <button type="button" class="role-switch-pill touch-press" onclick="closeSiteModal()">✕</button>
       </div>
       <div class="input-field-group">
         <label class="input-field-label">Location / Villa Name</label>
@@ -1277,8 +1228,8 @@
           <option value="completed">Completed</option>
         </select>
       </div>
-      <button class="btn-native btn-native-green touch-press" style="margin-top: 0.5rem;" onclick="saveSite()">Save
-        Location</button>
+      <button type="button" class="btn-native btn-native-green touch-press" style="margin-top: 0.5rem;"
+        onclick="saveSite()">Save Location</button>
     </div>
   </div>
 
@@ -1286,17 +1237,17 @@
     <div class="mobile-sheet-window" onclick="event.stopPropagation()">
       <div class="sheet-drag-handle"></div>
       <div class="mobile-card-title">
-        <span>Settle Salary</span>
-        <button class="role-switch-pill touch-press" onclick="closePayModal()">✕</button>
+        Settle Salary
+        <button type="button" class="role-switch-pill touch-press" onclick="closePayModal()">✕</button>
       </div>
       <input type="hidden" id="payEmpId">
       <input type="hidden" id="payMonth">
-      <p id="payEmpDetails" style="font-size: 0.9rem; color: #fff; font-weight: 700; margin-bottom: 1rem;"></p>
+      <div id="payEmpDetails" style="font-size: 0.9rem; color: #fff; font-weight: 700; margin-bottom: 1rem;"></div>
       <div class="input-field-group">
         <label class="input-field-label">Settlement Date</label>
         <input type="date" id="paySettlementDate" class="mobile-input num-font">
       </div>
-      <button class="btn-native btn-native-green touch-press" style="margin-top: 0.5rem;"
+      <button type="button" class="btn-native btn-native-green touch-press" style="margin-top: 0.5rem;"
         onclick="confirmMarkPaid()">Confirm Paid</button>
     </div>
   </div>
@@ -1305,10 +1256,10 @@
     <div class="mobile-sheet-window" style="max-width: 620px;" onclick="event.stopPropagation()">
       <div class="sheet-drag-handle"></div>
       <div class="mobile-card-title no-print">
-        <span>Payslip Preview</span>
+        Payslip Preview
         <div style="display: flex; gap: 0.4rem;">
-          <button class="role-switch-pill touch-press" onclick="window.print()">🖨️ Print</button>
-          <button class="role-switch-pill touch-press" onclick="closeSlipModal()">✕</button>
+          <button type="button" class="role-switch-pill touch-press" onclick="window.print()">Print</button>
+          <button type="button" class="role-switch-pill touch-press" onclick="closeSlipModal()">✕</button>
         </div>
       </div>
       <div id="slipPrintArea" class="printable-slip"
@@ -1368,44 +1319,28 @@
 
   <div id="mobileToastContainer" class="mobile-toast-container"></div>
 
-  <!-- Script Engine -->
+  <!-- Engine -->
   <script>
     const STORAGE_KEY = "mfa_app_state_v1";
     const GOOGLE_SHEET_URL_KEY = "mfa_gsheet_url_v1";
     const AUTH_SESSION_KEY = "mfa_auth_session_v1";
 
-    // Hardcoded production Google Sheet webhook URL
     const DEFAULT_CLOUD_URL = "https://script.google.com/macros/s/AKfycbwfRZpMEM9d4FbKUuB_hHQfliNhJf4DPv5tIRrWfSXisz4_0f642B0BxR_ZTde_lc-n0Q/exec";
+    const STANDARD_SHIFT_HOURS = 10.0;
 
     const VALID_ACCOUNTS = {
-      "admin@magicfineart.ae": { password: "admin123", role: "Admin", label: "👑 Administrator" },
-      "supervisor@magicfineart.ae": { password: "super123", role: "Supervisor", label: "👷 Site Supervisor" }
+      "admin@magicfineart.ae": { password: "admin123", role: "Admin", label: "Administrator" },
+      "supervisor@magicfineart.ae": { password: "super123", role: "Supervisor", label: "Site Supervisor" }
     };
 
     const DEFAULT_STATE = {
       userRole: "Admin",
       userEmail: "admin@magicfineart.ae",
       settings: { companyName: "Magic Fine Arts Technical Service LLC", otRate: 6.5 },
-      employees: [
-        { id: "emp_1", name: "Rajesh Kumar", designation: "Senior Plasterer", monthlySalary: 3200, joinDate: "2024-01-15", status: "active", phone: "+971501112233" },
-        { id: "emp_2", name: "Mohammed Ali", designation: "Decorative Plasterer", monthlySalary: 3800, joinDate: "2024-02-01", status: "active", phone: "+971502223344" },
-        { id: "emp_3", name: "Suresh Patel", designation: "Art Work Specialist", monthlySalary: 4000, joinDate: "2023-11-10", status: "active", phone: "+971503334455" },
-        { id: "emp_4", name: "Abdul Rahman", designation: "Plastering Helper", monthlySalary: 2200, joinDate: "2024-03-20", status: "active", phone: "+971504445566" },
-        { id: "emp_5", name: "Vikram Singh", designation: "Mason & Finisher", monthlySalary: 2800, joinDate: "2024-04-05", status: "active", phone: "+971505556677" },
-        { id: "emp_6", name: "Hassan Ibrahim", designation: "Site Painter", monthlySalary: 2500, joinDate: "2024-05-12", status: "active", phone: "+971506667788" }
-      ],
-      sites: [
-        { id: "site_1", siteName: "Burj Crown Villa Site", status: "active", shifts: { Day: { normalStart: "07:00", normalEnd: "15:30" }, Night: { normalStart: "21:00", normalEnd: "05:30" } } },
-        { id: "site_2", siteName: "Palm Jumeirah Beach Resort", status: "active", shifts: { Day: { normalStart: "07:00", normalEnd: "15:30" }, Night: { normalStart: "21:00", normalEnd: "05:30" } } },
-        { id: "site_3", siteName: "Downtown Dubai Art Wall", status: "active", shifts: { Day: { normalStart: "07:30", normalEnd: "16:00" }, Night: { normalStart: "20:00", normalEnd: "04:30" } } }
-      ],
-      attendance: [
-        { id: "att_101", employeeId: "emp_1", employeeName: "Rajesh Kumar", siteId: "site_1", siteName: "Burj Crown Villa Site", shiftType: "Day", workType: "Normal Plaster", workingDate: "2026-09-11", timeStart: "07:00", timeEnd: "17:30", overtimeHours: 2.0, status: "present", isDraft: false, remark: "Front facade finishing", createdBy: "supervisor@magicfineart.ae" },
-        { id: "att_102", employeeId: "emp_2", employeeName: "Mohammed Ali", siteId: "site_1", siteName: "Burj Crown Villa Site", shiftType: "Day", workType: "Decorative Plaster", workingDate: "2026-09-11", timeStart: "07:00", timeEnd: "17:30", overtimeHours: 2.0, status: "present", isDraft: false, remark: "Molding installation", createdBy: "supervisor@magicfineart.ae" }
-      ],
-      siteDailyLogs: [
-        { id: "log_201", siteId: "site_1", siteName: "Burj Crown Villa Site", shiftType: "Day", workType: "Normal Plaster", workingDate: "2026-09-11", areaCompletedSqm: 145.5, materialBagsUsed: 22, isDraft: false, remark: "", createdBy: "supervisor@magicfineart.ae" }
-      ],
+      employees: [],
+      sites: [],
+      attendance: [],
+      siteDailyLogs: [],
       salaryPayments: []
     };
 
@@ -1422,9 +1357,7 @@
 
     function saveState() {
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify(appState)); } catch (e) { }
-      if (cloudWebhookUrl) {
-        pushToGoogleSheet();
-      }
+      if (cloudWebhookUrl) pushToGoogleSheet();
     }
 
     async function initCloudEngine() {
@@ -1432,7 +1365,6 @@
         cloudWebhookUrl = DEFAULT_CLOUD_URL;
         localStorage.setItem(GOOGLE_SHEET_URL_KEY, DEFAULT_CLOUD_URL);
       }
-
       setCloudStatus(true);
       await pullFromGoogleSheet();
       setInterval(pullFromGoogleSheet, 10000);
@@ -1444,15 +1376,19 @@
       const settingsBadge = document.getElementById("settingsCloudBadge");
 
       if (online) {
-        topBadge.className = "cloud-status-badge cloud-online touch-press";
-        topLabel.textContent = "Sheet Synced";
-        settingsBadge.className = "status-badge badge-present";
-        settingsBadge.textContent = "🟢 Live (Google Sheet)";
+        if (topBadge) topBadge.className = "cloud-status-badge cloud-online touch-press";
+        if (topLabel) topLabel.textContent = "Sheet Synced";
+        if (settingsBadge) {
+          settingsBadge.className = "status-badge badge-present";
+          settingsBadge.textContent = "🟢 Live (Google Sheet)";
+        }
       } else {
-        topBadge.className = "cloud-status-badge cloud-pending touch-press";
-        topLabel.textContent = "Local Cache";
-        settingsBadge.className = "status-badge badge-pending";
-        settingsBadge.textContent = "🟠 Not Linked";
+        if (topBadge) topBadge.className = "cloud-status-badge cloud-pending touch-press";
+        if (topLabel) topLabel.textContent = "Local Cache";
+        if (settingsBadge) {
+          settingsBadge.className = "status-badge badge-pending";
+          settingsBadge.textContent = "🟠 Not Linked";
+        }
       }
     }
 
@@ -1495,8 +1431,8 @@
     }
 
     function refreshAllViews() {
-      renderDashboard();
       populateSiteDropdowns();
+      renderDashboard();
       renderAttendanceForm();
       renderHistoryLogs();
       renderSalarySheet();
@@ -1521,19 +1457,16 @@
         showToast("Enter a valid Google Script Web app URL", "danger");
         return;
       }
-
       cloudWebhookUrl = url;
       localStorage.setItem(GOOGLE_SHEET_URL_KEY, url);
       closeCloudModal();
       showToast("Connecting to Google Sheet...", "success");
-
       await pushToGoogleSheet();
       setTimeout(() => location.reload(), 600);
     }
 
-    /* Auth Handling with Native Mobile Credential Store / Keychain Support */
     async function checkAuthStatus() {
-      const session = localStorage.getItem(AUTH_SESSION_KEY);
+      const session = localStorage.getItem(AUTH_SESSION_KEY) || sessionStorage.getItem(AUTH_SESSION_KEY);
       const authScreen = document.getElementById("appAuthScreen");
 
       if (session) {
@@ -1549,7 +1482,6 @@
         }
       }
 
-      // If no stored session, try auto-retrieving saved credentials from Safari/Chrome Password Manager
       if (window.PasswordCredential && navigator.credentials) {
         try {
           const cred = await navigator.credentials.get({ password: true, mediation: "silent" });
@@ -1557,19 +1489,14 @@
             document.getElementById("loginEmailInput").value = cred.id;
             document.getElementById("loginPasswordInput").value = cred.password;
           }
-        } catch (err) {
-          console.log("Credential retrieval note:", err);
-        }
+        } catch (err) { }
       }
 
       if (authScreen) authScreen.style.display = "flex";
     }
 
-
-
     async function handleUserLogin(e) {
       if (e) e.preventDefault();
-
       const email = document.getElementById("loginEmailInput").value.trim().toLowerCase();
       const password = document.getElementById("loginPasswordInput").value.trim();
       const remember = document.getElementById("rememberMeCheckbox") ? document.getElementById("rememberMeCheckbox").checked : true;
@@ -1580,21 +1507,13 @@
         return;
       }
 
-      // 1. Trigger the native browser/OS "Save Password" dialog
       if (window.PasswordCredential && navigator.credentials) {
         try {
-          const cred = new PasswordCredential({
-            id: email,
-            password: password,
-            name: account.label
-          });
+          const cred = new PasswordCredential({ id: email, password: password, name: account.label });
           await navigator.credentials.store(cred);
-        } catch (credErr) {
-          console.log("Browser password store skipped:", credErr);
-        }
+        } catch (credErr) { }
       }
 
-      // 2. Persist local app session
       if (remember) {
         localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify({ email, role: account.role }));
       } else {
@@ -1613,17 +1532,11 @@
 
     async function handleUserLogout() {
       if (!confirm("Log out from this device?")) return;
-
-      // Prevent silent auto-login on immediate reload
       if (navigator.credentials && navigator.credentials.preventSilentAccess) {
-        try {
-          await navigator.credentials.preventSilentAccess();
-        } catch (e) { }
+        try { await navigator.credentials.preventSilentAccess(); } catch (e) { }
       }
-
       localStorage.removeItem(AUTH_SESSION_KEY);
       sessionStorage.removeItem(AUTH_SESSION_KEY);
-
       document.getElementById("loginEmailInput").value = "";
       document.getElementById("loginPasswordInput").value = "";
       document.getElementById("appAuthScreen").style.display = "flex";
@@ -1643,13 +1556,7 @@
       document.getElementById("salaryMonthPicker").value = monthStr;
       document.getElementById("paySettlementDate").value = todayStr;
 
-      populateSiteDropdowns();
-      renderDashboard();
-      renderAttendanceForm();
-      renderHistoryLogs();
-      renderSalarySheet();
-      renderEmployeeList();
-      renderSitesList();
+      refreshAllViews();
 
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("./sw.js").catch(() => { });
@@ -1674,21 +1581,19 @@
     function updateRoleUI() {
       const badge = document.getElementById("headerRoleBadge");
       const isAdmin = appState.userRole === "Admin";
-      badge.innerHTML = isAdmin ? "👑 Admin" : "👷 Supervisor";
+      if (badge) badge.textContent = isAdmin ? "Admin" : "Supervisor";
       document.querySelectorAll(".admin-only").forEach(el => el.style.display = isAdmin ? "" : "none");
     }
 
     function renderDashboard() {
       const todayStr = new Date().toISOString().split("T")[0];
-      const activeEmployees = appState.employees.filter(e => e.status === "active");
-      const activeSites = appState.sites.filter(s => s.status === "active");
+      const activeEmployees = (appState.employees || []).filter(e => e.status === "active");
+      const activeSites = (appState.sites || []).filter(s => s.status === "active");
 
-      const todayLogs = appState.attendance.filter(a => a.workingDate === todayStr && !a.isDraft);
+      const todayLogs = (appState.attendance || []).filter(a => a.workingDate === todayStr && !a.isDraft);
       const presentCount = todayLogs.filter(a => a.status === "present").length;
-      const percent = activeEmployees.length > 0 ? Math.round((presentCount / activeEmployees.length) * 100) : 0;
 
       document.getElementById("kpiPresentCount").textContent = `${presentCount} / ${activeEmployees.length}`;
-      document.getElementById("kpiPresentPercent").textContent = `${percent}% finalized today`;
       document.getElementById("kpiActiveSites").textContent = activeSites.length;
 
       const todayOt = todayLogs.reduce((acc, l) => acc + (l.overtimeHours || 0), 0);
@@ -1697,9 +1602,9 @@
       const currentMonth = todayStr.substring(0, 7);
       let pendingTotal = 0;
       activeEmployees.forEach(emp => {
-        const isPaid = appState.salaryPayments.some(p => p.employeeId === emp.id && p.month === currentMonth && p.paymentStatus === "Paid");
+        const isPaid = (appState.salaryPayments || []).some(p => p.employeeId === emp.id && p.month === currentMonth && p.paymentStatus === "Paid");
         if (!isPaid) {
-          const empMonthLogs = appState.attendance.filter(a => a.employeeId === emp.id && a.workingDate.startsWith(currentMonth) && !a.isDraft);
+          const empMonthLogs = (appState.attendance || []).filter(a => a.employeeId === emp.id && a.workingDate.startsWith(currentMonth) && !a.isDraft);
           const empOt = empMonthLogs.reduce((acc, l) => acc + (l.overtimeHours || 0), 0);
           pendingTotal += (emp.monthlySalary + (empOt * (appState.settings.otRate || 6.5)));
         }
@@ -1708,46 +1613,69 @@
 
       const container = document.getElementById("dashSiteSummaryList");
       container.innerHTML = "";
+
+      if (activeSites.length === 0) {
+        container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 1rem; font-size: 0.82rem;">No active sites registered. Add sites in Settings.</div>`;
+        return;
+      }
+
       activeSites.forEach(site => {
-        const allSiteLogs = appState.attendance.filter(a => a.siteId === site.id && a.workingDate === todayStr);
+        const allSiteLogs = (appState.attendance || []).filter(a => a.siteId === site.id && a.workingDate === todayStr);
         const isDraft = allSiteLogs.some(a => a.isDraft);
         const isDone = allSiteLogs.length > 0 && !isDraft;
         const dayCrew = allSiteLogs.filter(a => a.shiftType === "Day" && a.status === "present").length;
         const nightCrew = allSiteLogs.filter(a => a.shiftType === "Night" && a.status === "present").length;
 
-        let badgeHtml = `<span class="status-badge badge-absent">NOT STARTED</span>`;
-        if (isDraft) badgeHtml = `<span class="status-badge badge-pending">🟡 DRAFT</span>`;
-        if (isDone) badgeHtml = `<span class="status-badge badge-present">🟢 COMPLETED</span>`;
+        let statusText = "NOT STARTED";
+        if (isDraft) statusText = "DRAFT";
+        if (isDone) statusText = "COMPLETED";
 
         const div = document.createElement("div");
         div.style.cssText = "background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.85rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;";
         div.innerHTML = `
           <div>
             <div style="font-weight: 700; font-size: 0.88rem; color: #fff;">${site.siteName}</div>
-            <div style="font-size: 0.72rem; color: var(--text-sub); margin-top: 0.2rem;">Day: <strong>${dayCrew}</strong> • Night: <strong>${nightCrew}</strong> | ${badgeHtml}</div>
+            <div style="font-size: 0.75rem; color: var(--text-sub); margin-top: 0.2rem;">Day: ${dayCrew} | Night: ${nightCrew} | ${statusText}</div>
           </div>
-          <button class="role-switch-pill touch-press" onclick="quickMarkSite('${site.id}')">📝 Open Shift</button>
+          <button type="button" class="role-switch-pill touch-press" onclick="quickMarkSite('${site.id}')">Open Shift</button>
         `;
         container.appendChild(div);
       });
     }
 
-    function quickMarkSite(siteId) {
-      document.getElementById("attSiteSelect").value = siteId;
-      onAttSiteChange();
-      switchTab("attendance");
-    }
-
     function populateSiteDropdowns() {
       const attSelect = document.getElementById("attSiteSelect");
       const histSelect = document.getElementById("histSiteSelect");
+      if (!attSelect || !histSelect) return;
+
+      const currentAttVal = attSelect.value;
       attSelect.innerHTML = "";
       histSelect.innerHTML = '<option value="ALL">All Sites</option>';
 
-      appState.sites.filter(s => s.status === "active").forEach(site => {
-        attSelect.add(new Option(site.siteName, site.id));
-        histSelect.add(new Option(site.siteName, site.id));
-      });
+      const activeSites = (appState.sites || []).filter(s => s.status === "active");
+
+      if (activeSites.length === 0) {
+        attSelect.add(new Option("-- No Active Sites Found --", ""));
+      } else {
+        activeSites.forEach(site => {
+          attSelect.add(new Option(site.siteName, site.id));
+          histSelect.add(new Option(site.siteName, site.id));
+        });
+
+        if (currentAttVal && activeSites.some(s => s.id === currentAttVal)) {
+          attSelect.value = currentAttVal;
+        } else {
+          attSelect.value = activeSites[0].id;
+        }
+      }
+    }
+
+    function quickMarkSite(siteId) {
+      populateSiteDropdowns();
+      const attSelect = document.getElementById("attSiteSelect");
+      if (attSelect) attSelect.value = siteId;
+      switchTab("attendance");
+      renderAttendanceForm();
     }
 
     function onAttSiteChange() { renderAttendanceForm(); }
@@ -1769,74 +1697,143 @@
       document.getElementById("siteLogRatioDisplay").textContent = area > 0 ? `${(bags / area).toFixed(2)} Bags / SqM` : "0.00 Bags / SqM";
     }
 
-    function renderAttendanceForm() {
-      const siteId = document.getElementById("attSiteSelect").value;
-      const shiftType = document.getElementById("attShiftSelect").value;
-      const workingDate = document.getElementById("attWorkingDate").value;
+    function calcOvertimeHours(startStr, endStr) {
+      if (!startStr || !endStr) return 0;
+      const parseMinutes = (t) => {
+        const parts = t.split(":").map(Number);
+        return parts[0] * 60 + parts[1];
+      };
 
-      const existingSiteLog = appState.siteDailyLogs.find(l => l.siteId === siteId && l.shiftType === shiftType && l.workingDate === workingDate);
-      const existingAttLogs = appState.attendance.filter(a => a.siteId === siteId && a.shiftType === shiftType && a.workingDate === workingDate);
+      let start = parseMinutes(startStr);
+      let end = parseMinutes(endStr);
+      if (end < start) end += 24 * 60;
+
+      const totalWorkedHours = (end - start) / 60;
+      const overtime = totalWorkedHours - STANDARD_SHIFT_HOURS;
+      return overtime > 0 ? Math.round(overtime * 2) / 2 : 0;
+    }
+
+    function recalcWorkerOT(input) {
+      const card = input.closest(".crew-touch-card");
+      const startStr = card.querySelector(".emp-time-start").value;
+      const endStr = card.querySelector(".emp-time-end").value;
+      card.querySelector(".emp-ot-hours").value = calcOvertimeHours(startStr, endStr);
+    }
+
+    function applyQuickFillCrewTimes() {
+      const cards = document.querySelectorAll(".crew-touch-card");
+      if (cards.length === 0) return;
+
+      const firstCard = cards[0];
+      const masterStart = firstCard.querySelector(".emp-time-start").value;
+      const masterEnd = firstCard.querySelector(".emp-time-end").value;
+      const calculatedOT = calcOvertimeHours(masterStart, masterEnd);
+
+      cards.forEach(card => {
+        card.querySelector(".emp-time-start").value = masterStart;
+        card.querySelector(".emp-time-end").value = masterEnd;
+        card.querySelector(".emp-ot-hours").value = calculatedOT;
+      });
+
+      showToast(`Copied ${masterStart} - ${masterEnd} (OT: ${calculatedOT} hrs) to all crew`, "success");
+    }
+
+    function renderAttendanceForm() {
+      const siteSelect = document.getElementById("attSiteSelect");
+      const siteId = siteSelect ? siteSelect.value : "";
+      const shiftType = document.getElementById("attShiftSelect") ? document.getElementById("attShiftSelect").value : "Day";
+      const workingDate = document.getElementById("attWorkingDate") ? document.getElementById("attWorkingDate").value : new Date().toISOString().split("T")[0];
+
+      const container = document.getElementById("attWorkerList");
+      if (!container) return;
+
+      if (!siteId) {
+        container.innerHTML = `
+          <div style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.85rem; background: var(--bg-surface); border-radius: var(--radius-md); border: 1px dashed var(--border-subtle);">
+            No active site selected. Please create a site in Settings first.
+          </div>`;
+        return;
+      }
+
+      const activeEmployees = (appState.employees || []).filter(e => e.status === "active");
+      if (activeEmployees.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.85rem; background: var(--bg-surface); border-radius: var(--radius-md); border: 1px dashed var(--border-subtle);">
+            No active employees registered. Please add staff in Settings first.
+          </div>`;
+        return;
+      }
+
+      const existingSiteLog = (appState.siteDailyLogs || []).find(l => l.siteId === siteId && l.shiftType === shiftType && l.workingDate === workingDate);
+      const existingAttLogs = (appState.attendance || []).filter(a => a.siteId === siteId && a.shiftType === shiftType && a.workingDate === workingDate);
 
       const banner = document.getElementById("shiftStatusBanner");
       const bTitle = document.getElementById("shiftStatusTitle");
       const bDesc = document.getElementById("shiftStatusDesc");
       const bBadge = document.getElementById("shiftStatusBadge");
 
-      if (existingAttLogs.length > 0) {
-        const isDraft = existingAttLogs.some(a => a.isDraft);
-        if (isDraft) {
-          banner.className = "shift-state-banner draft";
-          bTitle.textContent = "Morning Check-In Saved as Draft";
-          bDesc.textContent = "Workers checked-in. Complete checkout, log bags & SqM in evening.";
-          bBadge.className = "status-badge badge-pending";
-          bBadge.textContent = "🟡 DRAFT";
+      if (banner && bTitle && bDesc && bBadge) {
+        if (existingAttLogs.length > 0) {
+          const isDraft = existingAttLogs.some(a => a.isDraft);
+          if (isDraft) {
+            banner.className = "shift-state-banner draft";
+            bTitle.textContent = "Check-In Saved as Draft";
+            bDesc.textContent = "Workers checked-in. Complete checkout and log output at shift end.";
+            bBadge.className = "status-badge badge-pending";
+            bBadge.textContent = "DRAFT";
+          } else {
+            banner.className = "shift-state-banner completed";
+            bTitle.textContent = "Shift Output Finalized";
+            bDesc.textContent = "All worker hours and material outputs are confirmed and synchronized.";
+            bBadge.className = "status-badge badge-present";
+            bBadge.textContent = "COMPLETED";
+          }
         } else {
-          banner.className = "shift-state-banner completed";
-          bTitle.textContent = "Shift Attendance & Output Finalized";
-          bDesc.textContent = "All worker hours and material outputs are confirmed and synchronized.";
-          bBadge.className = "status-badge badge-present";
-          bBadge.textContent = "🟢 COMPLETED";
+          banner.className = "shift-state-banner";
+          bTitle.textContent = "Shift State: Ready for Check-in";
+          bDesc.textContent = "Mark check-in as draft, then checkout and log output at shift end.";
+          bBadge.className = "status-badge badge-absent";
+          bBadge.textContent = "NOT STARTED";
         }
-      } else {
-        banner.className = "shift-state-banner";
-        bTitle.textContent = "Shift State: Ready for Morning Check-in";
-        bDesc.textContent = "Mark morning check-in as draft, then checkout & log materials in evening.";
-        bBadge.className = "status-badge badge-absent";
-        bBadge.textContent = "NOT STARTED";
       }
+
+      const workTypeEl = document.getElementById("siteLogWorkType");
+      const areaEl = document.getElementById("siteLogAreaSqm");
+      const bagsEl = document.getElementById("siteLogBagsUsed");
+      const customInput = document.getElementById("siteLogCustomWorkType");
 
       if (existingSiteLog) {
-        document.getElementById("siteLogWorkType").value = ["Normal Plaster", "Decorative Plaster", "Art Work"].includes(existingSiteLog.workType) ? existingSiteLog.workType : "Other";
-        if (document.getElementById("siteLogWorkType").value === "Other") {
-          document.getElementById("customWorkTypeGroup").style.display = "flex";
-          document.getElementById("siteLogCustomWorkType").value = existingSiteLog.workType;
+        if (workTypeEl) workTypeEl.value = ["Normal Plaster", "Decorative Plaster", "Art Work"].includes(existingSiteLog.workType) ? existingSiteLog.workType : "Other";
+        if (workTypeEl && workTypeEl.value === "Other") {
+          if (customInput) { customInput.style.display = "block"; customInput.value = existingSiteLog.workType; }
         } else {
-          document.getElementById("customWorkTypeGroup").style.display = "none";
+          if (customInput) customInput.style.display = "none";
         }
-        document.getElementById("siteLogAreaSqm").value = existingSiteLog.areaCompletedSqm || "";
-        document.getElementById("siteLogBagsUsed").value = existingSiteLog.materialBagsUsed || "";
-        calcMaterialRatio();
+        if (areaEl) areaEl.value = existingSiteLog.areaCompletedSqm || "";
+        if (bagsEl) bagsEl.value = existingSiteLog.materialBagsUsed || "";
       } else {
-        document.getElementById("siteLogWorkType").value = "Normal Plaster";
-        document.getElementById("customWorkTypeGroup").style.display = "none";
-        document.getElementById("siteLogAreaSqm").value = "";
-        document.getElementById("siteLogBagsUsed").value = "";
-        calcMaterialRatio();
+        if (workTypeEl) workTypeEl.value = "Normal Plaster";
+        if (customInput) customInput.style.display = "none";
+        if (areaEl) areaEl.value = "";
+        if (bagsEl) bagsEl.value = "";
+      }
+      calcMaterialRatio();
+
+      const siteObj = (appState.sites || []).find(s => s.id === siteId);
+      let defaultTimes = { normalStart: "07:00", normalEnd: "17:00" };
+      if (siteObj && siteObj.shifts && siteObj.shifts[shiftType]) {
+        defaultTimes = siteObj.shifts[shiftType];
+      } else if (shiftType === "Night") {
+        defaultTimes = { normalStart: "20:00", normalEnd: "06:00" };
       }
 
-      const container = document.getElementById("attWorkerList");
       container.innerHTML = "";
-      const activeEmployees = appState.employees.filter(e => e.status === "active");
-
-      const siteObj = appState.sites.find(s => s.id === siteId);
-      const defaultTimes = siteObj && siteObj.shifts && siteObj.shifts[shiftType] ? siteObj.shifts[shiftType] : { normalStart: "07:00", normalEnd: "15:30" };
-
       activeEmployees.forEach(emp => {
         const existing = existingAttLogs.find(a => a.employeeId === emp.id);
         const isPresent = existing ? existing.status === "present" : true;
         const timeStart = existing ? existing.timeStart : defaultTimes.normalStart;
         const timeEnd = existing ? existing.timeEnd : defaultTimes.normalEnd;
-        const otHours = existing ? existing.overtimeHours : calcOvertimeHours(timeStart, timeEnd, defaultTimes);
+        const otHours = existing ? existing.overtimeHours : calcOvertimeHours(timeStart, timeEnd);
         const workType = existing ? existing.workType : "Normal Plaster";
         const remark = existing ? existing.remark : "";
 
@@ -1846,10 +1843,10 @@
         card.innerHTML = `
           <div class="crew-card-top">
             <div class="crew-identity">
-              <div class="crew-avatar-badge">${emp.name.charAt(0)}</div>
+              <div class="crew-avatar-badge">${(emp.name || "W").charAt(0).toUpperCase()}</div>
               <div class="crew-name-box">
                 <strong>${emp.name}</strong>
-                <span>${emp.designation}</span>
+                <div>${emp.designation || 'Staff'}</div>
               </div>
             </div>
             <div class="ios-segmented-switch">
@@ -1871,7 +1868,7 @@
               <input type="number" step="0.5" inputmode="decimal" class="mobile-input num-font emp-ot-hours" style="padding: 0.45rem 0.5rem;" value="${otHours}">
             </div>
           </div>
-          <div style="${!isPresent ? 'display:none;' : ''}; display: flex; flex-direction: column; gap: 0.4rem;">
+          <div style="${!isPresent ? 'display:none;' : ''}; display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.25rem;">
             <select class="mobile-select emp-work-type" style="padding: 0.45rem 0.6rem;">
               <option value="Normal Plaster" ${workType === 'Normal Plaster' ? 'selected' : ''}>Normal Plaster</option>
               <option value="Decorative Plaster" ${workType === 'Decorative Plaster' ? 'selected' : ''}>Decorative Plaster</option>
@@ -1897,59 +1894,13 @@
       }
     }
 
-    const STANDARD_SHIFT_HOURS = 10.0;
-
-    // Calculates OT whenever worked duration exceeds 10 hours
-    function calcOvertimeHours(startStr, endStr) {
-      if (!startStr || !endStr) return 0;
-      const parseMinutes = (t) => {
-        const parts = t.split(":").map(Number);
-        return parts[0] * 60 + parts[1];
-      };
-
-      let start = parseMinutes(startStr);
-      let end = parseMinutes(endStr);
-
-      // Handles night shifts crossing midnight (e.g., 20:00 to 07:00)
-      if (end < start) end += 24 * 60;
-
-      const totalWorkedHours = (end - start) / 60;
-      const overtime = totalWorkedHours - STANDARD_SHIFT_HOURS;
-
-      return overtime > 0 ? Math.round(overtime * 2) / 2 : 0;
-    }
-
-    function recalcWorkerOT(input) {
-      const card = input.closest(".crew-touch-card");
-      const startStr = card.querySelector(".emp-time-start").value;
-      const endStr = card.querySelector(".emp-time-end").value;
-      card.querySelector(".emp-ot-hours").value = calcOvertimeHours(startStr, endStr);
-    }
-
-    // Auto-fills all crew members from the first person's time inputs
-    function applyQuickFillCrewTimes() {
-      const cards = document.querySelectorAll(".crew-touch-card");
-      if (cards.length === 0) return;
-
-      const firstCard = cards[0];
-      const masterStart = firstCard.querySelector(".emp-time-start").value;
-      const masterEnd = firstCard.querySelector(".emp-time-end").value;
-      const calculatedOT = calcOvertimeHours(masterStart, masterEnd);
-
-      cards.forEach(card => {
-        card.querySelector(".emp-time-start").value = masterStart;
-        card.querySelector(".emp-time-end").value = masterEnd;
-        card.querySelector(".emp-ot-hours").value = calculatedOT;
-      });
-
-      showToast(`Filled all crew: ${masterStart} - ${masterEnd} (OT: ${calculatedOT} hrs)`, "success");
-    }
-
     function saveShiftAttendance(isDraft = false) {
       const siteId = document.getElementById("attSiteSelect").value;
+      if (!siteId) { showToast("Select a site first", "danger"); return; }
+
       const shiftType = document.getElementById("attShiftSelect").value;
       const workingDate = document.getElementById("attWorkingDate").value;
-      const siteObj = appState.sites.find(s => s.id === siteId);
+      const siteObj = (appState.sites || []).find(s => s.id === siteId);
       const siteName = siteObj ? siteObj.siteName : "Site";
 
       const workTypeSel = document.getElementById("siteLogWorkType").value;
@@ -1957,20 +1908,20 @@
       const areaSqm = parseFloat(document.getElementById("siteLogAreaSqm").value) || 0;
       const bagsUsed = parseFloat(document.getElementById("siteLogBagsUsed").value) || 0;
 
-      appState.siteDailyLogs = appState.siteDailyLogs.filter(l => !(l.siteId === siteId && l.shiftType === shiftType && l.workingDate === workingDate));
+      appState.siteDailyLogs = (appState.siteDailyLogs || []).filter(l => !(l.siteId === siteId && l.shiftType === shiftType && l.workingDate === workingDate));
       appState.siteDailyLogs.push({
         id: "log_" + Date.now(),
         siteId, siteName, shiftType,
         workType: primaryWorkType, workingDate,
         areaCompletedSqm: areaSqm, materialBagsUsed: bagsUsed,
         isDraft,
-        remark: isDraft ? "Morning Check-In (Draft)" : "Completed Shift Output",
+        remark: isDraft ? "Check-In Draft" : "Completed Shift Output",
         createdBy: appState.userEmail
       });
 
       document.querySelectorAll(".crew-touch-card").forEach(card => {
         const empId = card.dataset.empId;
-        const empObj = appState.employees.find(e => e.id === empId);
+        const empObj = (appState.employees || []).find(e => e.id === empId);
         const isPresent = card.querySelector(".segmented-btn.active-present") !== null;
         const timeStart = card.querySelector(".emp-time-start").value;
         const timeEnd = card.querySelector(".emp-time-end").value;
@@ -1978,7 +1929,7 @@
         const workerWorkType = card.querySelector(".emp-work-type") ? card.querySelector(".emp-work-type").value : primaryWorkType;
         const remark = card.querySelector(".emp-remark").value.trim();
 
-        appState.attendance = appState.attendance.filter(a => !(a.employeeId === empId && a.workingDate === workingDate && a.siteId === siteId && a.shiftType === shiftType));
+        appState.attendance = (appState.attendance || []).filter(a => !(a.employeeId === empId && a.workingDate === workingDate && a.siteId === siteId && a.shiftType === shiftType));
         appState.attendance.push({
           id: "att_" + Date.now() + "_" + empId,
           employeeId: empId,
@@ -1989,13 +1940,13 @@
           overtimeHours: (isPresent && !isDraft) ? overtimeHours : 0,
           status: isPresent ? "present" : "absent",
           isDraft,
-          remark: remark || (isDraft ? "Morning check-in" : "Shift complete"),
+          remark: remark || (isDraft ? "Check-in draft" : "Shift complete"),
           createdBy: appState.userEmail
         });
       });
 
       saveState();
-      showToast(isDraft ? "☁️ Draft Check-In Synced to Sheet" : "☁️ Shift Finalized in Sheet", "success");
+      showToast(isDraft ? "Draft Check-In Synced to Sheet" : "Shift Output Finalized in Sheet", "success");
       renderAttendanceForm();
       renderDashboard();
     }
@@ -2012,8 +1963,8 @@
       renderHistoryLogs();
     }
 
-    // Navigates directly to the shift form with loaded details for editing
     function editAttendanceShift(workingDate, siteId, shiftType) {
+      populateSiteDropdowns();
       document.getElementById("attWorkingDate").value = workingDate;
       document.getElementById("attSiteSelect").value = siteId;
       document.getElementById("attShiftSelect").value = shiftType;
@@ -2031,12 +1982,17 @@
       if (currentHistSubTab === "worker") {
         const tbody = document.getElementById("histWorkerTbody");
         tbody.innerHTML = "";
-        let logs = appState.attendance.filter(l => {
+        let logs = (appState.attendance || []).filter(l => {
           if (startDate && l.workingDate < startDate) return false;
           if (endDate && l.workingDate > endDate) return false;
           if (siteFilter !== "ALL" && l.siteId !== siteFilter) return false;
           return true;
         }).sort((a, b) => b.workingDate.localeCompare(a.workingDate));
+
+        if (logs.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No attendance logs found for this filter.</td></tr>`;
+          return;
+        }
 
         logs.forEach(l => {
           const tr = document.createElement("tr");
@@ -2044,14 +2000,14 @@
             <td class="num-font">${l.workingDate}</td>
             <td style="font-weight: 700;">${l.employeeName}</td>
             <td>${l.siteName}</td>
-            <td><span class="status-badge badge-pending">${l.shiftType}</span></td>
-            <td><span class="status-badge ${l.status === 'present' ? 'badge-present' : 'badge-absent'}">${l.status.toUpperCase()}</span></td>
-            <td>${l.isDraft ? '<span class="status-badge badge-pending">DRAFT</span>' : '<span class="status-badge badge-present">FINAL</span>'}</td>
+            <td>${l.shiftType}</td>
+            <td>${l.status.toUpperCase()}</td>
+            <td>${l.isDraft ? 'DRAFT' : 'FINAL'}</td>
             <td class="num-font">${l.status === 'present' ? l.timeStart + ' - ' + l.timeEnd : '-'}</td>
             <td class="num-font" style="font-weight: 700; color: var(--uae-gold);">${l.isDraft ? '0 hrs (Draft)' : (l.overtimeHours || 0) + ' hrs'}</td>
             <td>
               <div style="display: flex; gap: 0.35rem;">
-                <button type="button" class="role-switch-pill touch-press" style="border-color: var(--uae-green); color: #4ade80;" onclick="editAttendanceShift('${l.workingDate}', '${l.siteId}', '${l.shiftType}')">✏️ Edit</button>
+                <button type="button" class="role-switch-pill touch-press" style="border-color: var(--uae-green); color: #4ade80;" onclick="editAttendanceShift('${l.workingDate}', '${l.siteId}', '${l.shiftType}')">Edit</button>
                 <button type="button" class="role-switch-pill touch-press admin-only" style="border-color: var(--uae-red); color: var(--uae-red);" onclick="deleteAttendanceLog('${l.id}')">Delete</button>
               </div>
             </td>
@@ -2061,12 +2017,17 @@
       } else {
         const tbody = document.getElementById("histSiteTbody");
         tbody.innerHTML = "";
-        let siteLogs = appState.siteDailyLogs.filter(l => {
+        let siteLogs = (appState.siteDailyLogs || []).filter(l => {
           if (startDate && l.workingDate < startDate) return false;
           if (endDate && l.workingDate > endDate) return false;
           if (siteFilter !== "ALL" && l.siteId !== siteFilter) return false;
           return true;
         }).sort((a, b) => b.workingDate.localeCompare(a.workingDate));
+
+        if (siteLogs.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No site output logs found for this filter.</td></tr>`;
+          return;
+        }
 
         siteLogs.forEach(l => {
           const ratio = l.areaCompletedSqm > 0 ? (l.materialBagsUsed / l.areaCompletedSqm).toFixed(2) : "0.00";
@@ -2074,15 +2035,15 @@
           tr.innerHTML = `
             <td class="num-font">${l.workingDate}</td>
             <td style="font-weight: 700;">${l.siteName}</td>
-            <td><span class="status-badge badge-pending">${l.shiftType}</span></td>
-            <td>${l.isDraft ? '<span class="status-badge badge-pending">DRAFT</span>' : '<span class="status-badge badge-present">FINAL</span>'}</td>
+            <td>${l.shiftType}</td>
+            <td>${l.isDraft ? 'DRAFT' : 'FINAL'}</td>
             <td>${l.workType}</td>
             <td class="num-font" style="font-weight: 700; color: #4ade80;">${l.areaCompletedSqm} m²</td>
             <td class="num-font" style="font-weight: 700;">${l.materialBagsUsed} bags</td>
             <td class="num-font" style="color: var(--uae-gold); font-weight: 600;">${ratio} Bags/m²</td>
             <td>
               <div style="display: flex; gap: 0.35rem;">
-                <button type="button" class="role-switch-pill touch-press" style="border-color: var(--uae-green); color: #4ade80;" onclick="editAttendanceShift('${l.workingDate}', '${l.siteId}', '${l.shiftType}')">✏️ Edit</button>
+                <button type="button" class="role-switch-pill touch-press" style="border-color: var(--uae-green); color: #4ade80;" onclick="editAttendanceShift('${l.workingDate}', '${l.siteId}', '${l.shiftType}')">Edit</button>
                 <button type="button" class="role-switch-pill touch-press admin-only" style="border-color: var(--uae-red); color: var(--uae-red);" onclick="deleteSiteLog('${l.id}')">Delete</button>
               </div>
             </td>
@@ -2095,7 +2056,7 @@
 
     function deleteAttendanceLog(id) {
       if (!confirm("Delete record from Google Sheet?")) return;
-      appState.attendance = appState.attendance.filter(a => a.id !== id);
+      appState.attendance = (appState.attendance || []).filter(a => a.id !== id);
       saveState();
       renderHistoryLogs();
       showToast("Attendance deleted", "danger");
@@ -2103,7 +2064,7 @@
 
     function deleteSiteLog(id) {
       if (!confirm("Delete site log from Google Sheet?")) return;
-      appState.siteDailyLogs = appState.siteDailyLogs.filter(l => l.id !== id);
+      appState.siteDailyLogs = (appState.siteDailyLogs || []).filter(l => l.id !== id);
       saveState();
       renderHistoryLogs();
       showToast("Site log deleted", "danger");
@@ -2117,14 +2078,20 @@
       let totalBasic = 0, totalOT = 0, totalGross = 0, totalPending = 0;
       const otRate = appState.settings.otRate || 6.5;
 
-      appState.employees.forEach(emp => {
-        const empLogs = appState.attendance.filter(a => a.employeeId === emp.id && a.workingDate.startsWith(month) && a.status === "present" && !a.isDraft);
+      const employees = appState.employees || [];
+      if (employees.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No employees registered.</td></tr>`;
+        return;
+      }
+
+      employees.forEach(emp => {
+        const empLogs = (appState.attendance || []).filter(a => a.employeeId === emp.id && a.workingDate.startsWith(month) && a.status === "present" && !a.isDraft);
         const otHours = empLogs.reduce((acc, l) => acc + (l.overtimeHours || 0), 0);
         const otPay = otHours * otRate;
         const basic = emp.monthlySalary || 0;
         const gross = basic + otPay;
 
-        const paymentRecord = appState.salaryPayments.find(p => p.employeeId === emp.id && p.month === month);
+        const paymentRecord = (appState.salaryPayments || []).find(p => p.employeeId === emp.id && p.month === month);
         const isPaid = paymentRecord && paymentRecord.paymentStatus === "Paid";
         const payDate = isPaid ? paymentRecord.paymentDate : "-";
 
@@ -2139,12 +2106,12 @@
           <td class="num-font">${otHours.toFixed(1)} hrs</td>
           <td class="num-font" style="color: var(--uae-gold); font-weight: 600;">AED ${otPay.toLocaleString()}</td>
           <td class="num-font" style="color: #4ade80; font-weight: 700;">AED ${gross.toLocaleString()}</td>
-          <td><span class="status-badge ${isPaid ? 'badge-paid' : 'badge-pending'}">${isPaid ? 'PAID' : 'PENDING'}</span></td>
+          <td>${isPaid ? 'PAID' : 'PENDING'}</td>
           <td class="num-font" style="font-size: 0.8rem; color: var(--text-sub);">${payDate}</td>
           <td>
             <div style="display: flex; gap: 0.35rem;">
-              ${!isPaid ? `<button class="role-switch-pill touch-press" style="background: var(--uae-green); color: #fff; border-color: var(--uae-green);" onclick="openPayModal('${emp.id}', '${month}', '${emp.name}', ${gross})">Settle</button>` : ''}
-              <button class="role-switch-pill touch-press" onclick="printPaySlip('${emp.id}', '${month}', ${basic}, ${otHours}, ${otPay}, ${gross}, '${isPaid ? 'Paid' : 'Pending'}')">Slip</button>
+              ${!isPaid ? `<button type="button" class="role-switch-pill touch-press" style="background: var(--uae-green); color: #fff; border-color: var(--uae-green);" onclick="openPayModal('${emp.id}', '${month}', '${emp.name}', ${gross})">Settle</button>` : ''}
+              <button type="button" class="role-switch-pill touch-press" onclick="printPaySlip('${emp.id}', '${month}', ${basic}, ${otHours}, ${otPay}, ${gross}, '${isPaid ? 'Paid' : 'Pending'}')">Slip</button>
             </div>
           </td>
         `;
@@ -2170,7 +2137,7 @@
       const month = document.getElementById("payMonth").value;
       const payDate = document.getElementById("paySettlementDate").value;
 
-      appState.salaryPayments = appState.salaryPayments.filter(p => !(p.employeeId === empId && p.month === month));
+      appState.salaryPayments = (appState.salaryPayments || []).filter(p => !(p.employeeId === empId && p.month === month));
       appState.salaryPayments.push({ id: "pay_" + Date.now(), employeeId: empId, month, paymentStatus: "Paid", paymentDate: payDate });
 
       saveState();
@@ -2181,7 +2148,7 @@
     }
 
     function printPaySlip(empId, month, basic, otHours, otPay, gross, status) {
-      const emp = appState.employees.find(e => e.id === empId);
+      const emp = (appState.employees || []).find(e => e.id === empId);
       if (!emp) return;
       document.getElementById("slipEmpName").textContent = emp.name;
       document.getElementById("slipEmpRole").textContent = emp.designation;
@@ -2198,18 +2165,25 @@
     function renderEmployeeList() {
       const tbody = document.getElementById("employeeTbody");
       tbody.innerHTML = "";
-      appState.employees.forEach(emp => {
+      const employees = appState.employees || [];
+
+      if (employees.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No employees registered yet. Click "+ Add New" to add staff.</td></tr>`;
+        return;
+      }
+
+      employees.forEach(emp => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td style="font-weight: 700;">${emp.name}</td>
           <td>${emp.designation}</td>
           <td class="num-font" style="color: #4ade80; font-weight: 600;">AED ${emp.monthlySalary.toLocaleString()}</td>
           <td class="num-font">${emp.phone || '-'}</td>
-          <td><span class="status-badge ${emp.status === 'active' ? 'badge-present' : 'badge-absent'}">${emp.status.toUpperCase()}</span></td>
+          <td>${emp.status.toUpperCase()}</td>
           <td>
             <div style="display: flex; gap: 0.35rem;">
-              <button class="role-switch-pill touch-press" onclick="editEmployee('${emp.id}')">Edit</button>
-              <button class="role-switch-pill touch-press" style="border-color: var(--uae-red); color: var(--uae-red); background: rgba(224, 25, 35, 0.1);" onclick="deleteEmployee('${emp.id}')">🗑️ Remove</button>
+              <button type="button" class="role-switch-pill touch-press" onclick="editEmployee('${emp.id}')">Edit</button>
+              <button type="button" class="role-switch-pill touch-press" style="border-color: var(--uae-red); color: var(--uae-red); background: rgba(224, 25, 35, 0.1);" onclick="deleteEmployee('${emp.id}')">Remove</button>
             </div>
           </td>
         `;
@@ -2222,17 +2196,19 @@
       document.getElementById("empEditId").value = "";
       document.getElementById("empName").value = "";
       document.getElementById("empSalary").value = "";
+      document.getElementById("empPhone").value = "";
       document.getElementById("employeeModal").classList.add("active");
     }
     function closeEmployeeModal(e) { if (!e || e.target === document.getElementById("employeeModal")) document.getElementById("employeeModal").classList.remove("active"); }
 
     function editEmployee(empId) {
-      const emp = appState.employees.find(e => e.id === empId);
+      const emp = (appState.employees || []).find(e => e.id === empId);
       if (!emp) return;
       document.getElementById("empEditId").value = emp.id;
       document.getElementById("empName").value = emp.name;
       document.getElementById("empDesignation").value = emp.designation;
       document.getElementById("empSalary").value = emp.monthlySalary;
+      document.getElementById("empPhone").value = emp.phone || "";
       document.getElementById("employeeModal").classList.add("active");
     }
 
@@ -2241,50 +2217,54 @@
       const name = document.getElementById("empName").value.trim();
       const designation = document.getElementById("empDesignation").value;
       const monthlySalary = parseFloat(document.getElementById("empSalary").value) || 0;
-      if (!name || monthlySalary <= 0) return;
+      const phone = document.getElementById("empPhone").value.trim();
+      if (!name || monthlySalary <= 0) { showToast("Provide valid name and salary", "danger"); return; }
+
+      if (!appState.employees) appState.employees = [];
 
       if (id) {
         const emp = appState.employees.find(e => e.id === id);
-        if (emp) { emp.name = name; emp.designation = designation; emp.monthlySalary = monthlySalary; }
+        if (emp) { emp.name = name; emp.designation = designation; emp.monthlySalary = monthlySalary; emp.phone = phone; }
       } else {
-        appState.employees.push({ id: "emp_" + Date.now(), name, designation, monthlySalary, joinDate: new Date().toISOString().split("T")[0], status: "active" });
+        appState.employees.push({ id: "emp_" + Date.now(), name, designation, monthlySalary, phone, joinDate: new Date().toISOString().split("T")[0], status: "active" });
       }
 
       saveState();
       closeEmployeeModal();
-      renderEmployeeList();
+      refreshAllViews();
       showToast("Employee saved to Google Sheet", "success");
     }
 
     function deleteEmployee(empId) {
-      const emp = appState.employees.find(e => e.id === empId);
+      const emp = (appState.employees || []).find(e => e.id === empId);
       if (!emp) return;
       if (!confirm(`Permanently remove "${emp.name}" from Google Sheet?`)) return;
 
       appState.employees = appState.employees.filter(e => e.id !== empId);
       saveState();
-      renderEmployeeList();
-      renderAttendanceForm();
-      renderSalarySheet();
-      renderDashboard();
+      refreshAllViews();
       showToast(`Employee "${emp.name}" deleted`, "danger");
     }
 
     function renderSitesList() {
       const container = document.getElementById("sitesListContainer");
       container.innerHTML = "";
-      appState.sites.forEach(site => {
+      const sites = appState.sites || [];
+
+      if (sites.length === 0) {
+        container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 1.25rem; font-size: 0.85rem;">No sites created yet. Click "+ Add Site" above.</div>`;
+        return;
+      }
+
+      sites.forEach(site => {
         const div = document.createElement("div");
         div.style.cssText = "background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.85rem; margin-bottom: 0.65rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;";
         div.innerHTML = `
           <div>
             <div style="font-weight: 700; font-size: 0.88rem; color: #fff;">${site.siteName}</div>
-            <div class="num-font" style="font-size: 0.72rem; color: var(--text-sub);">Day: 07:00-15:30 | Night: 21:00-05:30</div>
+            <div class="num-font" style="font-size: 0.75rem; color: var(--text-sub);">Day: 07:00-17:00 | Night: 20:00-06:00 (${site.status.toUpperCase()})</div>
           </div>
-          <div style="display: flex; align-items: center; gap: 0.4rem;">
-            <span class="status-badge ${site.status === 'active' ? 'badge-present' : 'badge-absent'}">${site.status.toUpperCase()}</span>
-            <button class="role-switch-pill touch-press admin-only" style="border-color: var(--uae-red); color: var(--uae-red); background: rgba(224, 25, 35, 0.1);" onclick="deleteSite('${site.id}')">🗑️ Remove</button>
-          </div>
+          <button type="button" class="role-switch-pill touch-press admin-only" style="border-color: var(--uae-red); color: var(--uae-red); background: rgba(224, 25, 35, 0.1);" onclick="deleteSite('${site.id}')">Remove</button>
         `;
         container.appendChild(div);
       });
@@ -2293,42 +2273,41 @@
 
     function openAddSiteModal() { document.getElementById("siteNameInput").value = ""; document.getElementById("siteModal").classList.add("active"); }
     function closeSiteModal(e) { if (!e || e.target === document.getElementById("siteModal")) document.getElementById("siteModal").classList.remove("active"); }
+
     function saveSite() {
       const name = document.getElementById("siteNameInput").value.trim();
       if (!name) return;
-      appState.sites.push({ id: "site_" + Date.now(), siteName: name, status: "active", shifts: { Day: { normalStart: "07:00", normalEnd: "15:30" }, Night: { normalStart: "21:00", normalEnd: "05:30" } } });
+      if (!appState.sites) appState.sites = [];
+      appState.sites.push({ id: "site_" + Date.now(), siteName: name, status: "active", shifts: { Day: { normalStart: "07:00", normalEnd: "17:00" }, Night: { normalStart: "20:00", normalEnd: "06:00" } } });
 
       saveState();
       closeSiteModal();
-      renderSitesList();
-      populateSiteDropdowns();
+      refreshAllViews();
       showToast("Site saved to Google Sheet", "success");
     }
 
     function deleteSite(siteId) {
-      const site = appState.sites.find(s => s.id === siteId);
+      const site = (appState.sites || []).find(s => s.id === siteId);
       if (!site) return;
       if (!confirm(`Permanently remove site "${site.siteName}" from Google Sheet?`)) return;
 
       appState.sites = appState.sites.filter(s => s.id !== siteId);
       saveState();
-      populateSiteDropdowns();
-      renderSitesList();
-      renderAttendanceForm();
-      renderDashboard();
+      refreshAllViews();
       showToast(`Site "${site.siteName}" deleted`, "danger");
     }
 
     function exportAttendanceCSV() {
       let csv = "Date,Employee Name,Site,Shift,Status,Stage,Start Time,End Time,OT Hours,Work Type,Remarks\n";
-      appState.attendance.forEach(a => { csv += `"${a.workingDate}","${a.employeeName}","${a.siteName}","${a.shiftType}","${a.status}","${a.isDraft ? 'DRAFT' : 'FINAL'}","${a.timeStart}","${a.timeEnd}",${a.overtimeHours || 0},"${a.workType || ''}","${a.remark || ''}"\n`; });
+      (appState.attendance || []).forEach(a => { csv += `"${a.workingDate}","${a.employeeName}","${a.siteName}","${a.shiftType}","${a.status}","${a.isDraft ? 'DRAFT' : 'FINAL'}","${a.timeStart}","${a.timeEnd}",${a.overtimeHours || 0},"${a.workType || ''}","${a.remark || ''}"\n`; });
       downloadFile(csv, `MFA_Attendance_${new Date().toISOString().split("T")[0]}.csv`, "text/csv");
     }
+
     function exportSalaryCSV() {
       const month = document.getElementById("salaryMonthPicker").value;
       let csv = "Employee Name,Designation,Basic Salary AED,OT Hours,OT Pay AED,Gross Pay AED,Status\n";
-      appState.employees.forEach(emp => {
-        const empLogs = appState.attendance.filter(a => a.employeeId === emp.id && a.workingDate.startsWith(month) && a.status === "present" && !a.isDraft);
+      (appState.employees || []).forEach(emp => {
+        const empLogs = (appState.attendance || []).filter(a => a.employeeId === emp.id && a.workingDate.startsWith(month) && a.status === "present" && !a.isDraft);
         const otHours = empLogs.reduce((acc, l) => acc + (l.overtimeHours || 0), 0);
         const otPay = otHours * (appState.settings.otRate || 6.5);
         const basic = emp.monthlySalary || 0;
@@ -2336,11 +2315,13 @@
       });
       downloadFile(csv, `MFA_Salary_Sheet_${month}.csv`, "text/csv");
     }
+
     function exportSiteLogCSV() {
       let csv = "Date,Site Name,Shift,Stage,Work Type,Completed SqM,Bags Used\n";
-      appState.siteDailyLogs.forEach(l => { csv += `"${l.workingDate}","${l.siteName}","${l.shiftType}","${l.isDraft ? 'DRAFT' : 'FINAL'}","${l.workType}",${l.areaCompletedSqm},${l.materialBagsUsed}\n`; });
+      (appState.siteDailyLogs || []).forEach(l => { csv += `"${l.workingDate}","${l.siteName}","${l.shiftType}","${l.isDraft ? 'DRAFT' : 'FINAL'}","${l.workType}",${l.areaCompletedSqm},${l.materialBagsUsed}\n`; });
       downloadFile(csv, `MFA_Site_Logs.csv`, "text/csv");
     }
+
     function downloadFile(content, fileName, mimeType) {
       const blob = new Blob([content], { type: mimeType });
       const url = URL.createObjectURL(blob);
