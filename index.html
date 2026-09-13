@@ -532,37 +532,6 @@
       color: var(--text-sub);
     }
 
-    .ios-segmented-switch {
-      display: flex;
-      background: var(--bg-canvas);
-      padding: 3px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border-subtle);
-      width: 145px;
-    }
-
-    .segmented-btn {
-      flex: 1;
-      min-height: 36px;
-      border: none;
-      border-radius: var(--radius-xs);
-      font-size: 0.78rem;
-      font-weight: 700;
-      cursor: pointer;
-      color: var(--text-muted);
-      background: transparent;
-    }
-
-    .segmented-btn.active-present {
-      background: var(--uae-green);
-      color: #fff;
-    }
-
-    .segmented-btn.active-absent {
-      background: var(--uae-red);
-      color: #fff;
-    }
-
     .crew-time-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -725,7 +694,7 @@
 
 <body>
 
-  <!-- Login Gateway -->
+  <!-- Login Gateway (Clean Enterprise Login with Password Saving) -->
   <div id="appAuthScreen"
     style="position: fixed; inset: 0; z-index: 9999; background: var(--bg-canvas); display: flex; align-items: center; justify-content: center; padding: 1.25rem; backdrop-filter: blur(20px);">
     <div
@@ -736,29 +705,29 @@
           MFA</div>
         <h2 style="font-size: 1.2rem; font-weight: 800; color: #fff; margin: 0;">Magic Fine Arts</h2>
         <div style="font-size: 0.76rem; color: var(--uae-gold); font-weight: 700; margin-top: 0.25rem;">Technical
-          Service LLC • Cloud Portal</div>
+          Service LLC • Portal Gateway</div>
       </div>
 
       <form id="loginForm" name="loginForm" method="post" action="javascript:void(0);" onsubmit="handleUserLogin(event)"
         style="display: flex; flex-direction: column; gap: 0.95rem;">
         <div class="input-field-group" style="margin: 0;">
-          <label class="input-field-label">Account Email</label>
+          <label class="input-field-label">Portal Account Email</label>
           <input type="email" id="loginEmailInput" name="username" class="mobile-input num-font"
-            placeholder="name@magicfineart.ae" required autocomplete="username" autocapitalize="none">
+            placeholder="name@magicfineart.ae" required autocomplete="username" autocapitalize="none" autocorrect="off">
         </div>
 
         <div class="input-field-group" style="margin: 0;">
-          <label class="input-field-label">Password</label>
+          <label class="input-field-label">Account Password</label>
           <input type="password" id="loginPasswordInput" name="password" class="mobile-input num-font"
             placeholder="••••••••" required autocomplete="current-password">
         </div>
 
-        <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 0.15rem;">
           <label
             style="display: flex; align-items: center; gap: 0.45rem; font-size: 0.78rem; color: var(--text-sub); cursor: pointer;">
             <input type="checkbox" id="rememberMeCheckbox" checked
               style="accent-color: var(--uae-green); width: 16px; height: 16px;">
-            Stay signed in
+            Remember on this device
           </label>
         </div>
 
@@ -766,6 +735,8 @@
           Sign In to Workspace
         </button>
       </form>
+      <p style="text-align: center; font-size: 0.72rem; color: var(--text-muted); margin: 0;">Authorized site
+        supervisors and administrative staff only.</p>
     </div>
   </div>
 
@@ -839,7 +810,7 @@
           <strong id="shiftStatusTitle" style="font-size: 0.88rem; color: #fff;">Shift State: Ready for
             Check-in</strong>
           <p id="shiftStatusDesc" style="font-size: 0.72rem; color: var(--text-sub);">Mark morning check-in as draft,
-            then checkout & log materials upon shift completion.</p>
+            then checkout & log output at shift completion.</p>
         </div>
         <div id="shiftStatusBadge" class="status-badge badge-pending">NOT STARTED</div>
       </div>
@@ -867,10 +838,20 @@
 
       <div class="mobile-card">
         <div class="mobile-card-title">
-          2. Crew Check-in & Hours (Standard: 10 hrs)
-          <button type="button" class="role-switch-pill touch-press" onclick="applyQuickFillCrewTimes()">Auto-fill All
-            Crew</button>
+          2. Site Crew Allocation (Standard: 10 hrs)
+          <button type="button" class="role-switch-pill touch-press" onclick="applyQuickFillCrewTimes()">Auto-fill Crew
+            Hours</button>
         </div>
+
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.85rem;">
+          <select id="attAddWorkerSelect" class="mobile-select" style="min-height: 42px; font-size: 0.85rem;">
+            <option value="">-- Add Available Worker to Site --</option>
+          </select>
+          <button type="button" class="btn-native btn-native-green touch-press"
+            style="width: auto; min-height: 42px; padding: 0 1rem; font-size: 0.85rem; white-space: nowrap;"
+            onclick="addWorkerToCurrentSite()">+ Add to Site</button>
+        </div>
+
         <div id="attWorkerList"></div>
       </div>
 
@@ -883,7 +864,7 @@
               <option value="Normal Plaster">Normal Plaster</option>
               <option value="Decorative Plaster">Decorative Plaster</option>
               <option value="Art Work">Art Work Specialist</option>
-              <option value="Other">Custom Work Type (Enter below)</option>
+              <option value="Other">Custom Work Type (Type below)</option>
             </select>
             <input type="text" id="siteLogCustomWorkType" class="mobile-input"
               placeholder="Type custom work description here" style="display: none;">
@@ -1137,7 +1118,7 @@
     <button type="button" class="nav-tab-btn touch-press admin-only" data-screen="salary" onclick="switchTab('salary')">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round"
-          d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+          d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08-.402-2.599-1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
         </path>
       </svg>
       <div>Payroll</div>
@@ -1738,6 +1719,76 @@
       showToast(`Copied ${masterStart} - ${masterEnd} (OT: ${calculatedOT} hrs) to all crew`, "success");
     }
 
+    function populateAvailableWorkerDropdown(siteId, shiftType, workingDate) {
+      const select = document.getElementById("attAddWorkerSelect");
+      if (!select) return;
+      select.innerHTML = '<option value="">-- Add Available Worker to Site --</option>';
+
+      const activeEmployees = (appState.employees || []).filter(e => e.status === "active");
+
+      const busyWorkerIds = (appState.attendance || [])
+        .filter(a => a.workingDate === workingDate && a.shiftType === shiftType && a.status === "present")
+        .map(a => a.employeeId);
+
+      const available = activeEmployees.filter(emp => !busyWorkerIds.includes(emp.id));
+
+      available.forEach(emp => {
+        select.add(new Option(`${emp.name} (${emp.designation || 'Staff'})`, emp.id));
+      });
+    }
+
+    function addWorkerToCurrentSite() {
+      const select = document.getElementById("attAddWorkerSelect");
+      const empId = select ? select.value : "";
+      if (!empId) {
+        showToast("Select an available worker first", "danger");
+        return;
+      }
+
+      const siteId = document.getElementById("attSiteSelect").value;
+      const shiftType = document.getElementById("attShiftSelect").value;
+      const workingDate = document.getElementById("attWorkingDate").value;
+      const siteObj = (appState.sites || []).find(s => s.id === siteId);
+      const siteName = siteObj ? siteObj.siteName : "Site";
+      const empObj = (appState.employees || []).find(e => e.id === empId);
+
+      let defaultTimes = { normalStart: "07:00", normalEnd: "17:00" };
+      if (siteObj && siteObj.shifts && siteObj.shifts[shiftType]) {
+        defaultTimes = siteObj.shifts[shiftType];
+      } else if (shiftType === "Night") {
+        defaultTimes = { normalStart: "20:00", normalEnd: "06:00" };
+      }
+
+      appState.attendance = (appState.attendance || []).filter(a => !(a.employeeId === empId && a.workingDate === workingDate && a.shiftType === shiftType));
+      appState.attendance.push({
+        id: "att_" + Date.now() + "_" + empId,
+        employeeId: empId,
+        employeeName: empObj ? empObj.name : "Worker",
+        siteId, siteName, shiftType,
+        workType: "Normal Plaster", workingDate,
+        timeStart: defaultTimes.normalStart,
+        timeEnd: defaultTimes.normalEnd,
+        overtimeHours: 0,
+        status: "present",
+        isDraft: true,
+        remark: "Assigned to site",
+        createdBy: appState.userEmail
+      });
+
+      renderAttendanceForm();
+      showToast(`${empObj ? empObj.name : 'Worker'} added to ${siteName}`, "success");
+    }
+
+    function removeWorkerFromSite(empId) {
+      const siteId = document.getElementById("attSiteSelect").value;
+      const shiftType = document.getElementById("attShiftSelect").value;
+      const workingDate = document.getElementById("attWorkingDate").value;
+
+      appState.attendance = (appState.attendance || []).filter(a => !(a.employeeId === empId && a.workingDate === workingDate && a.shiftType === shiftType && a.siteId === siteId));
+      renderAttendanceForm();
+      showToast("Worker removed from this site roster", "info");
+    }
+
     function renderAttendanceForm() {
       const siteSelect = document.getElementById("attSiteSelect");
       const siteId = siteSelect ? siteSelect.value : "";
@@ -1755,17 +1806,10 @@
         return;
       }
 
-      const activeEmployees = (appState.employees || []).filter(e => e.status === "active");
-      if (activeEmployees.length === 0) {
-        container.innerHTML = `
-          <div style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.85rem; background: var(--bg-surface); border-radius: var(--radius-md); border: 1px dashed var(--border-subtle);">
-            No active employees registered. Please add staff in Settings first.
-          </div>`;
-        return;
-      }
+      populateAvailableWorkerDropdown(siteId, shiftType, workingDate);
 
       const existingSiteLog = (appState.siteDailyLogs || []).find(l => l.siteId === siteId && l.shiftType === shiftType && l.workingDate === workingDate);
-      const existingAttLogs = (appState.attendance || []).filter(a => a.siteId === siteId && a.shiftType === shiftType && a.workingDate === workingDate);
+      const currentSiteAttLogs = (appState.attendance || []).filter(a => a.siteId === siteId && a.shiftType === shiftType && a.workingDate === workingDate && a.status === "present");
 
       const banner = document.getElementById("shiftStatusBanner");
       const bTitle = document.getElementById("shiftStatusTitle");
@@ -1773,12 +1817,12 @@
       const bBadge = document.getElementById("shiftStatusBadge");
 
       if (banner && bTitle && bDesc && bBadge) {
-        if (existingAttLogs.length > 0) {
-          const isDraft = existingAttLogs.some(a => a.isDraft);
+        if (currentSiteAttLogs.length > 0) {
+          const isDraft = currentSiteAttLogs.some(a => a.isDraft);
           if (isDraft) {
             banner.className = "shift-state-banner draft";
             bTitle.textContent = "Check-In Saved as Draft";
-            bDesc.textContent = "Workers checked-in. Complete checkout and log output at shift end.";
+            bDesc.textContent = "Assigned workers active. Complete checkout and log output upon shift end.";
             bBadge.className = "status-badge badge-pending";
             bBadge.textContent = "DRAFT";
           } else {
@@ -1790,10 +1834,10 @@
           }
         } else {
           banner.className = "shift-state-banner";
-          bTitle.textContent = "Shift State: Ready for Check-in";
-          bDesc.textContent = "Mark check-in as draft, then checkout and log output at shift end.";
+          bTitle.textContent = "Site Roster Empty";
+          bDesc.textContent = "Add available workers using the dropdown above to assign them to this site.";
           bBadge.className = "status-badge badge-absent";
-          bBadge.textContent = "NOT STARTED";
+          bBadge.textContent = "NO CREW";
         }
       }
 
@@ -1828,33 +1872,39 @@
       }
 
       container.innerHTML = "";
-      activeEmployees.forEach(emp => {
-        const existing = existingAttLogs.find(a => a.employeeId === emp.id);
-        const isPresent = existing ? existing.status === "present" : true;
-        const timeStart = existing ? existing.timeStart : defaultTimes.normalStart;
-        const timeEnd = existing ? existing.timeEnd : defaultTimes.normalEnd;
-        const otHours = existing ? existing.overtimeHours : calcOvertimeHours(timeStart, timeEnd);
-        const workType = existing ? existing.workType : "Normal Plaster";
-        const remark = existing ? existing.remark : "";
+
+      if (currentSiteAttLogs.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.85rem; background: var(--bg-surface); border-radius: var(--radius-md); border: 1px dashed var(--border-subtle);">
+            No workers currently assigned to this site.<br>
+            Use <strong>+ Add to Site</strong> above to build the crew.
+          </div>`;
+        return;
+      }
+
+      currentSiteAttLogs.forEach(att => {
+        const emp = (appState.employees || []).find(e => e.id === att.employeeId) || { name: att.employeeName, designation: 'Staff' };
+        const timeStart = att.timeStart || defaultTimes.normalStart;
+        const timeEnd = att.timeEnd || defaultTimes.normalEnd;
+        const otHours = att.overtimeHours || calcOvertimeHours(timeStart, timeEnd);
+        const workType = att.workType || "Normal Plaster";
+        const remark = att.remark || "";
 
         const card = document.createElement("div");
         card.className = "crew-touch-card";
-        card.dataset.empId = emp.id;
+        card.dataset.empId = att.employeeId;
         card.innerHTML = `
           <div class="crew-card-top">
             <div class="crew-identity">
               <div class="crew-avatar-badge">${(emp.name || "W").charAt(0).toUpperCase()}</div>
               <div class="crew-name-box">
                 <strong>${emp.name}</strong>
-                <div>${emp.designation || 'Staff'}</div>
+                <div>${emp.designation || 'Staff'} • <span style="color:#4ade80; font-weight:700;">Present</span></div>
               </div>
             </div>
-            <div class="ios-segmented-switch">
-              <button type="button" class="segmented-btn ${isPresent ? 'active-present' : ''} touch-press" onclick="toggleWorkerStatus(this, 'present')">Present</button>
-              <button type="button" class="segmented-btn ${!isPresent ? 'active-absent' : ''} touch-press" onclick="toggleWorkerStatus(this, 'absent')">Absent</button>
-            </div>
+            <button type="button" class="role-switch-pill touch-press" style="border-color: var(--uae-red); color: var(--uae-red); background: rgba(224,25,35,0.08);" onclick="removeWorkerFromSite('${att.employeeId}')">✕ Remove</button>
           </div>
-          <div class="crew-time-grid" style="${!isPresent ? 'display:none;' : ''}">
+          <div class="crew-time-grid">
             <div>
               <label class="input-field-label">Start Time</label>
               <input type="time" class="mobile-input num-font emp-time-start" style="padding: 0.45rem 0.5rem;" value="${timeStart}" onchange="recalcWorkerOT(this)">
@@ -1868,7 +1918,7 @@
               <input type="number" step="0.5" inputmode="decimal" class="mobile-input num-font emp-ot-hours" style="padding: 0.45rem 0.5rem;" value="${otHours}">
             </div>
           </div>
-          <div style="${!isPresent ? 'display:none;' : ''}; display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.25rem;">
+          <div style="display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.25rem;">
             <select class="mobile-select emp-work-type" style="padding: 0.45rem 0.6rem;">
               <option value="Normal Plaster" ${workType === 'Normal Plaster' ? 'selected' : ''}>Normal Plaster</option>
               <option value="Decorative Plaster" ${workType === 'Decorative Plaster' ? 'selected' : ''}>Decorative Plaster</option>
@@ -1880,18 +1930,6 @@
         `;
         container.appendChild(card);
       });
-    }
-
-    function toggleWorkerStatus(btn, status) {
-      const card = btn.closest(".crew-touch-card");
-      card.querySelectorAll(".segmented-btn").forEach(b => b.className = "segmented-btn touch-press");
-      if (status === "present") {
-        btn.classList.add("active-present");
-        card.querySelectorAll(".crew-time-grid, div[style*='flex-direction: column']").forEach(el => el.style.display = "");
-      } else {
-        btn.classList.add("active-absent");
-        card.querySelectorAll(".crew-time-grid, div[style*='flex-direction: column']").forEach(el => el.style.display = "none");
-      }
     }
 
     function saveShiftAttendance(isDraft = false) {
@@ -1919,17 +1957,17 @@
         createdBy: appState.userEmail
       });
 
-      document.querySelectorAll(".crew-touch-card").forEach(card => {
+      const assignedCards = document.querySelectorAll(".crew-touch-card");
+      assignedCards.forEach(card => {
         const empId = card.dataset.empId;
         const empObj = (appState.employees || []).find(e => e.id === empId);
-        const isPresent = card.querySelector(".segmented-btn.active-present") !== null;
         const timeStart = card.querySelector(".emp-time-start").value;
         const timeEnd = card.querySelector(".emp-time-end").value;
         const overtimeHours = parseFloat(card.querySelector(".emp-ot-hours").value) || 0;
         const workerWorkType = card.querySelector(".emp-work-type") ? card.querySelector(".emp-work-type").value : primaryWorkType;
         const remark = card.querySelector(".emp-remark").value.trim();
 
-        appState.attendance = (appState.attendance || []).filter(a => !(a.employeeId === empId && a.workingDate === workingDate && a.siteId === siteId && a.shiftType === shiftType));
+        appState.attendance = (appState.attendance || []).filter(a => !(a.employeeId === empId && a.workingDate === workingDate && a.shiftType === shiftType));
         appState.attendance.push({
           id: "att_" + Date.now() + "_" + empId,
           employeeId: empId,
@@ -1937,16 +1975,39 @@
           siteId, siteName, shiftType,
           workType: workerWorkType, workingDate,
           timeStart, timeEnd,
-          overtimeHours: (isPresent && !isDraft) ? overtimeHours : 0,
-          status: isPresent ? "present" : "absent",
+          overtimeHours: !isDraft ? overtimeHours : 0,
+          status: "present",
           isDraft,
-          remark: remark || (isDraft ? "Check-in draft" : "Shift complete"),
+          remark: remark || (isDraft ? "Draft Check-In" : "Shift Complete"),
           createdBy: appState.userEmail
         });
       });
 
+      if (!isDraft) {
+        const activeEmployees = (appState.employees || []).filter(e => e.status === "active");
+        activeEmployees.forEach(emp => {
+          const isAssignedAnywhere = (appState.attendance || []).some(a => a.employeeId === emp.id && a.workingDate === workingDate && a.shiftType === shiftType && a.status === "present");
+          if (!isAssignedAnywhere) {
+            appState.attendance = (appState.attendance || []).filter(a => !(a.employeeId === emp.id && a.workingDate === workingDate && a.shiftType === shiftType));
+            appState.attendance.push({
+              id: "att_" + Date.now() + "_" + emp.id,
+              employeeId: emp.id,
+              employeeName: emp.name,
+              siteId: "NONE", siteName: "Unassigned", shiftType,
+              workType: "-", workingDate,
+              timeStart: "-", timeEnd: "-",
+              overtimeHours: 0,
+              status: "absent",
+              isDraft: false,
+              remark: "Not assigned to any site",
+              createdBy: appState.userEmail
+            });
+          }
+        });
+      }
+
       saveState();
-      showToast(isDraft ? "Draft Check-In Synced to Sheet" : "Shift Output Finalized in Sheet", "success");
+      showToast(isDraft ? "Draft saved for this site" : "Shift finalized; unassigned workers marked absent", "success");
       renderAttendanceForm();
       renderDashboard();
     }
